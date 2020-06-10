@@ -1,0 +1,26 @@
+{
+  "name": "car-selling-project",
+  "version": "1.0.0",
+  "description": "MAS Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sfilmak/MAS-project.git"
+  },
+  "keywords": [
+    "car",
+    "rental"
+  ],
+  "author": "Roman Savchyn (s17202)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sfilmak/MAS-project/issues"
+  },
+  "homepage": "https://github.com/sfilmak/MAS-project#readme",
+  "devDependencies": {
+    "webpack": "^4.43.0"
+  }
+}

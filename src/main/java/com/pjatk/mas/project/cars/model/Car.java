@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Entity
 public class Car {
@@ -18,6 +19,8 @@ public class Car {
 
     @NotBlank
     private String model;
+
+    public Car(){}
 
     public Car(@NotBlank String manufacturer, @NotBlank String model) {
         this.setManufacturer(manufacturer);
@@ -55,5 +58,20 @@ public class Car {
                 ", manufacturer='" + manufacturer + '\'' +
                 ", model='" + model + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(carID, car.carID) &&
+                Objects.equals(manufacturer, car.manufacturer) &&
+                Objects.equals(model, car.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carID, manufacturer, model);
     }
 }
