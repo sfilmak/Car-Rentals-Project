@@ -7,8 +7,8 @@ import com.pjatk.mas.project.cars.model.Car;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CarRepository extends CrudRepository<Car, Long> {
-    Optional<Car> findById(Long id);
+    /*Optional<Car> findById(Long id);
     Set<Car> findByManufacturer(String manufacturer);
-    Set<Car> findByModel(String model);
+    Set<Car> findByModel(String model);*/
 }
 

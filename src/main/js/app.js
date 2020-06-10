@@ -37,25 +37,26 @@ class CarList extends React.Component{
 		return (
 			<table>
 				<tbody>
-					<tr>
-						<th>Car manufacturer</th>
-						<th>Car model</th>
-					</tr>
-					{cars}
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Description</th>
+				</tr>
+				{cars}
 				</tbody>
 			</table>
 		)
 	}
 }
-// end::car-list[]
+// end::cars-list[]
 
-// tag::car[]
+// tag::cars[]
 class Car extends React.Component{
 	render() {
 		return (
 			<tr>
-				<td>{this.props.car.manufacturer}</td>
-				<td>{this.props.car.model}</td>
+				<td>{this.props.cars.manufacturer}</td>
+				<td>{this.props.cars.model}</td>
 			</tr>
 		)
 	}
