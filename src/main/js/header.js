@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -10,11 +11,15 @@ const useStyles = makeStyles(() => ({
     },
     title: {
         flexGrow: 1,
-        color: "red"
+        color: "white"
     },
     toolbar_style: {
-        background: "white",
+        padding: 0,
+        background: "#FF775A",
         textAlign: "center",
+    },
+    toolbar: {
+        padding: 0,
     },
 }));
 
@@ -24,12 +29,13 @@ export default function Header() {
     return (
         <div className={classes.root}>
             <AppBar position="static" className={classes.toolbar_style}>
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
+                <Toolbar className={classes.toolbar}>
+                    <Typography variant="h4" className={classes.title}>
                         Cars rental
                     </Typography>
                 </Toolbar>
             </AppBar>
+            <Box m={1}/>
         </div>
     );
 }

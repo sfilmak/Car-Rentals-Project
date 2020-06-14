@@ -10,7 +10,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
     gridList: {
-        margin: 10
+        marginLeft: '100px !important',
+        marginRight: '100px !important',
+        marginTop: '20px !important',
+        marginBottom: '20px !important',
     },
     gridSubtile: {
         background: 'rgba(0, 0, 0, 0.8)'
@@ -18,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
     gridTile: {
         display: 'block',
         cursor: 'pointer',
+    },
+    title: {
+        fontSize: '1.25rem',
+    },
+    subtitle: {
+        fontSize: '1rem',
     },
 }));
 
@@ -31,13 +40,13 @@ const Cars = ({ cars }) => {
 
     return (
         <div className={classes.root}>
-            <GridList cellHeight={260} cols={3} className={classes.gridList}>
+            <GridList cellHeight={245} cols={3} className={classes.gridList}>
                 {cars.map((car) => (
                     <GridListTile key={car.imageURL} className={classes.gridTile}  onClick={(e) => handleCarClick(e, car)}>
-                        <img src={car.imageURL} alt="Car" />
+                        <img src={car.imageURL} alt={car.model} />
                         <GridListTileBar className={classes.gridSubtile}
-                            title={<b>{car.manufacturer} {car.model}</b>}
-                            subtitle={<span>{car.pricePerDay}$/day</span>}
+                            title={<b className={classes.title}>{car.manufacturer} {car.model}</b>}
+                            subtitle={<span className={classes.subtitle}>{car.pricePerDay}$/day</span>}
                         />
                     </GridListTile>
                 ))}
