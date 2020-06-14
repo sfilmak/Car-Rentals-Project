@@ -20,11 +20,18 @@ public class Car {
     @NotBlank
     private String model;
 
+    @NotBlank
+    private String imageURL;
+
+    private int pricePerDay;
+
     public Car(){}
 
-    public Car(@NotBlank String manufacturer, @NotBlank String model) {
+    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String imageURL, int pricePerDay) {
         this.setManufacturer(manufacturer);
         this.setModel(model);
+        this.setImageURL(imageURL);
+        this.setPricePerDay(pricePerDay);
     }
 
     public Long getCarID() {
@@ -49,6 +56,22 @@ public class Car {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public int getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(int pricePerDay) {
+        this.pricePerDay = pricePerDay;
     }
 
     @Override

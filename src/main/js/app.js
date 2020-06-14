@@ -1,12 +1,11 @@
 'use strict';
-// tag::vars[]
+
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Cars from './cars';
-// end::vars[]
+import Header from "./header";
 
 class App extends Component {
-
 	state = {
 		cars: []
 	};
@@ -21,9 +20,10 @@ class App extends Component {
 	}
 
 	render() {
-		return (
+		return [
+			<Header/>,
 			<Cars cars={this.state.cars} />
-		)
+		]
 	}
 }
 
