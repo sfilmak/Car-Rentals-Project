@@ -19,6 +19,9 @@ public class CarSellingProjectApplication {
 		return (args) -> {
 			Car car1 = new Car("Jaguar", "E-Type");
 			carRepo.save(car1);
+
+			Car car2 = new Car("Tesla", "Model Y");
+			carRepo.save(car2);
 		};
 	}
 
