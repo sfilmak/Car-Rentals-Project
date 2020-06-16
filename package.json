@@ -33,6 +33,7 @@
     "babel-loader": "^8.1.0",
     "html-webpack-plugin": "^4.3.0",
     "react-dom": "^16.13.1",
-    "rest": "^2.0.0"
+    "rest": "^2.0.0",
+    "styled-components": "^5.1.1"
   }
 }
