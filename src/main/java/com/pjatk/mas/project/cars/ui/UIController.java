@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UIController {
-    @RequestMapping(value = "/")
+    @RequestMapping(value = {"/", "/carInfo"})
     public String index() {
         return "index";
     }

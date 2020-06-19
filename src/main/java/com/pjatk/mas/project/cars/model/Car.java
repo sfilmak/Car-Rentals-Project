@@ -1,9 +1,6 @@
 package com.pjatk.mas.project.cars.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -29,6 +26,7 @@ public class Car {
     private String carType;
 
     @NotNull
+    @Column(columnDefinition = "DATE")
     private LocalDate dateOfManufacture;
 
     //Should be bigger than 0

@@ -6,7 +6,7 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-    entry: './src/main/js/app.js',
+    entry: './src/main/js/index.js',
     devtool: 'sourcemaps',
     cache: true,
     mode: 'development',
