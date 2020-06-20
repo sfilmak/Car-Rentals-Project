@@ -17,5 +17,4 @@ const CarInfo = ({ cars }) => {
     );
 };
 
-
 export default CarInfo

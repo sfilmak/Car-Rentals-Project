@@ -1,9 +1,6 @@
 package com.pjatk.mas.project.cars.repos;
 
-import java.util.Optional;
-import java.util.Set;
-
-import com.pjatk.mas.project.cars.model.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Car;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CarRepository extends CrudRepository<Car, Long> {

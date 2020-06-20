@@ -1,6 +1,6 @@
 package com.pjatk.mas.project.cars.ui;
 
-import com.pjatk.mas.project.cars.model.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Car;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;

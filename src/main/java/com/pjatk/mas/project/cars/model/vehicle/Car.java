@@ -1,10 +1,12 @@
-package com.pjatk.mas.project.cars.model;
+package com.pjatk.mas.project.cars.model.vehicle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Car {
@@ -38,7 +40,14 @@ public class Car {
     @NotBlank
     private String imageURL;
 
-    public Car(){}
+    //Composition
+    @OneToOne
+    private Engine engine;
+
+    private static Set<Engine> allParts = new HashSet<>();
+
+    public Car() {
+    }
 
     public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
         this.setManufacturer(manufacturer);
@@ -127,6 +136,14 @@ public class Car {
         this.maxSpeed = maxSpeed;
     }
 
+    public static void setPricePerDay(Long carID, float price) {
+        //TODO
+    }
+
+    public static void setPricePerDay(Long carID, float price, float tax) {
+        //TODO
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -149,5 +166,25 @@ public class Car {
     @Override
     public int hashCode() {
         return Objects.hash(carID, manufacturer, model);
+    }
+
+    public void addEngine(Engine engine) {
+        if (allParts.contains(engine)) {
+            throw new IllegalArgumentException("This engine is added to some other car");
+        }
+        this.engine = engine;
+        allParts.add(engine);
+    }
+
+    public void removeEngine(Engine engine) {
+        if (engine == null) {
+            throw new IllegalArgumentException("Engine cannot be null");
+        }
+        if (!allParts.contains(engine)) {
+            throw new IllegalArgumentException("Cannot find this engine among all engines");
+        }
+        this.engine = null;
+        allParts.remove(engine);
+        Engine.destroyPart(engine);
     }
 }

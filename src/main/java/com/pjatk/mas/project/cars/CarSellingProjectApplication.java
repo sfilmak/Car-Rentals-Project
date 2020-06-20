@@ -1,7 +1,13 @@
 package com.pjatk.mas.project.cars;
 
-import com.pjatk.mas.project.cars.model.Car;
+import com.pjatk.mas.project.cars.model.enums.EngineType;
+import com.pjatk.mas.project.cars.model.person.Customer;
+import com.pjatk.mas.project.cars.model.person.DrivingLicense;
+import com.pjatk.mas.project.cars.model.vehicle.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Engine;
 import com.pjatk.mas.project.cars.repos.CarRepository;
+import com.pjatk.mas.project.cars.repos.CustomerRepository;
+import com.pjatk.mas.project.cars.repos.EngineRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,10 +25,20 @@ public class CarSellingProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner runner(CarRepository carRepo) {
+	public CommandLineRunner runner(CarRepository carRepo,
+									CustomerRepository customerRepo,
+									EngineRepo engineRepo) {
 		return (args) -> {
-			/*Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
+
+			DrivingLicense drivingLicense = new DrivingLicense(228L, LocalDate.of(2019, Month.JUNE, 5), "Polska");
+
+			Customer customer = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
+					"sidl@gmail.com", "+228", "Nye tvoe delo street", drivingLicense);
+
+			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg");
+
+			Engine engine = Engine.createEngine(car1, "DS", EngineType.HYBRID, 2.0f, 4);
 
 			Car car2 = new Car("Tesla", "Model Y", "Red", "SUV", LocalDate.of(2020, Month.APRIL, 26),
 					120, "https://habrastorage.org/webt/4o/z3/5i/4oz35iflygfg479mt2n6huxikae.jpeg");
@@ -51,7 +67,10 @@ public class CarSellingProjectApplication {
 			Car car10 = new Car("Audi", "A3", "Blue", "Hatchbac", LocalDate.of(2020, Month.MAY, 6), 90,
 					"https://habrastorage.org/webt/ar/9u/yz/ar9uyzikg_id4ilafhv9b3412ca.jpeg");
 
-			carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));*/
+
+			engineRepo.save(engine);
+			carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
+			customerRepo.save(customer);
 		};
 	}
 
