@@ -1,5 +1,7 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
+import com.pjatk.mas.project.cars.model.CarRental;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -40,14 +42,25 @@ public class Car {
     @NotBlank
     private String imageURL;
 
-    //Composition
-    @OneToOne
-    private Engine engine;
+    //TODO Composition
+    //@OneToOne
+   // private Engine engine;
 
-    private static Set<Engine> allParts = new HashSet<>();
+   // private static Set<Engine> allParts = new HashSet<>();
 
-    public Car() {
-    }
+    //Association with a CarRental
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
+    @NotNull
+    @Column(nullable = false)
+    private final Set<CarRental> carRentals = new HashSet<>();
+
+    //Association with a Technical Inspection
+    @OneToMany(mappedBy = "TECHNICAL_INSPECTIONID", fetch = FetchType.LAZY)
+    @NotNull
+    @Column(nullable = false)
+    private final Set<TechnicalInspection> technicalInspectionsSet = new HashSet<>();
+
+    public Car() { }
 
     public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
         this.setManufacturer(manufacturer);
@@ -144,6 +157,34 @@ public class Car {
         //TODO
     }
 
+    public void addCar(CarRental carRental) {
+        if(!carRentals.contains(carRental)) {
+            carRentals.add(carRental);
+            carRental.setCar(this);
+        }
+    }
+
+    public void removeCar(CarRental carRental, Car newCar) {
+        if(carRentals.contains(carRental)) {
+            carRentals.remove(carRental);
+            carRental.setCar(newCar);
+        }
+    }
+
+    public void addTechnicalInspection(TechnicalInspection technicalInspection) {
+        if(!technicalInspectionsSet.contains(technicalInspection)) {
+            technicalInspectionsSet.add(technicalInspection);
+            technicalInspection.setCar(this);
+        }
+    }
+
+    public void removeTechnicalInspection(TechnicalInspection technicalInspection, Car newCar) {
+        if(technicalInspectionsSet.contains(technicalInspection)) {
+            technicalInspectionsSet.remove(technicalInspection);
+            technicalInspection.setCar(newCar);
+        }
+    }
+
     @Override
     public String toString() {
         return "Car{" +
@@ -166,25 +207,5 @@ public class Car {
     @Override
     public int hashCode() {
         return Objects.hash(carID, manufacturer, model);
-    }
-
-    public void addEngine(Engine engine) {
-        if (allParts.contains(engine)) {
-            throw new IllegalArgumentException("This engine is added to some other car");
-        }
-        this.engine = engine;
-        allParts.add(engine);
-    }
-
-    public void removeEngine(Engine engine) {
-        if (engine == null) {
-            throw new IllegalArgumentException("Engine cannot be null");
-        }
-        if (!allParts.contains(engine)) {
-            throw new IllegalArgumentException("Cannot find this engine among all engines");
-        }
-        this.engine = null;
-        allParts.remove(engine);
-        Engine.destroyPart(engine);
     }
 }

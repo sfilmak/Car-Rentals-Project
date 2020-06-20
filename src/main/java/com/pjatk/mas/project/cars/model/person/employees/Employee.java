@@ -33,6 +33,8 @@ public class Employee extends Person {
     @Column(columnDefinition = "DATE")
     private LocalDate internshipEndDate;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private EmployeeStatus employeeStatus;
 
     public Employee(){

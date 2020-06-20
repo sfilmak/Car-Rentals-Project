@@ -1,18 +1,17 @@
 package com.pjatk.mas.project.cars;
 
-import com.pjatk.mas.project.cars.model.enums.EngineType;
+import com.pjatk.mas.project.cars.model.CarRental;
+import com.pjatk.mas.project.cars.model.enums.InspectionType;
+import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
-import com.pjatk.mas.project.cars.model.vehicle.Engine;
-import com.pjatk.mas.project.cars.repos.CarRepository;
-import com.pjatk.mas.project.cars.repos.CustomerRepository;
-import com.pjatk.mas.project.cars.repos.EngineRepo;
+import com.pjatk.mas.project.cars.model.vehicle.TechnicalInspection;
+import com.pjatk.mas.project.cars.repos.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
@@ -25,20 +24,13 @@ public class CarSellingProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner runner(CarRepository carRepo,
-									CustomerRepository customerRepo,
-									EngineRepo engineRepo) {
+	public CommandLineRunner runner(CustomerRepository customerRepo,
+									EngineRepo engineRepo,
+									CarRentalRepository carRentalRepo,
+									TechnicalInspectionRepo techRepo) {
 		return (args) -> {
-
-			DrivingLicense drivingLicense = new DrivingLicense(228L, LocalDate.of(2019, Month.JUNE, 5), "Polska");
-
-			Customer customer = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
-					"sidl@gmail.com", "+228", "Nye tvoe delo street", drivingLicense);
-
 			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg");
-
-			Engine engine = Engine.createEngine(car1, "DS", EngineType.HYBRID, 2.0f, 4);
 
 			Car car2 = new Car("Tesla", "Model Y", "Red", "SUV", LocalDate.of(2020, Month.APRIL, 26),
 					120, "https://habrastorage.org/webt/4o/z3/5i/4oz35iflygfg479mt2n6huxikae.jpeg");
@@ -61,16 +53,32 @@ public class CarSellingProjectApplication {
 			Car car8 = new Car("Ford", "Fiesta ST", "Orange", "Hatchback", LocalDate.of(2017, Month.JUNE, 23),120,
 					"https://habrastorage.org/webt/e_/tl/cl/e_tlclbcjsxexkdinftnafbtgqo.jpeg");
 
-			Car car9 = new Car("Skoda", "Rapid", "White", "Sedan", LocalDate.of(2019, Month.SEPTEMBER, 14), 60,
+			Car car9 = new Car("Skoda", "Rapid", "White", "Sedan", LocalDate.of(2019, Month.SEPTEMBER, 14), 60, 186.5f,
 					"https://habrastorage.org/webt/b4/-d/bz/b4-dbzgsm0exxwenszogrwqak3u.jpeg");
 
-			Car car10 = new Car("Audi", "A3", "Blue", "Hatchbac", LocalDate.of(2020, Month.MAY, 6), 90,
+			Car car10 = new Car("Audi", "A3", "Blue", "Hatchback", LocalDate.of(2020, Month.MAY, 6), 90, 200f,
 					"https://habrastorage.org/webt/ar/9u/yz/ar9uyzikg_id4ilafhv9b3412ca.jpeg");
 
 
-			engineRepo.save(engine);
-			carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
-			customerRepo.save(customer);
+			DrivingLicense drivingLicense = new DrivingLicense(228L, LocalDate.of(2019, Month.JUNE, 5), "Polska");
+			DrivingLicense drivingLicense2 = new DrivingLicense(229L, LocalDate.of(2020, Month.JANUARY, 20), "Belarus");
+
+			Customer customer1 = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
+					"sidl@gmail.com", "+228", "Nye tvoe delo street", drivingLicense);
+
+			Customer customer2 = new Customer("Artsiom", "Paliaschuk", LocalDate.of(2000, Month.MAY, 6),
+					"pal@gmail.com", "+48328382324", "Stara Praga", drivingLicense2);
+
+
+
+			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.JUNE, 22), LocalDate.of(2020, Month.JUNE, 24), "Comments", RentalStatus.PLANNED, car1, customer1);
+			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), "Comments", RentalStatus.PLANNED, car2, customer2);
+			carRentalRepo.saveAll(Arrays.asList(carRental1, carRental2));
+
+			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JANUARY, 12), true, 150000L, InspectionType.ENGINE, car1);
+			techRepo.save(technicalInspection);
+			//carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
+			//customerRepo.save(customer);
 		};
 	}
 

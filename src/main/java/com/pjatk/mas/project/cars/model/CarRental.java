@@ -1,6 +1,8 @@
 package com.pjatk.mas.project.cars.model;
 
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
+import com.pjatk.mas.project.cars.model.person.Customer;
+import com.pjatk.mas.project.cars.model.vehicle.Car;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ public class CarRental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long carID;
+    private Long carRentalID;
 
     @NotNull
     @Column(columnDefinition = "DATE")
@@ -25,23 +27,38 @@ public class CarRental {
     private String comments;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private RentalStatus rentalStatus;
+
+    @NotNull(message = "CarRental should have a car!")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "car_id", nullable = false)
+    private Car car;
+
+    @NotNull(message = "CarRental should have a customer!")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     public CarRental(){}
 
-    public CarRental(@NotNull LocalDate startDate, @NotNull LocalDate endDate, @NotBlank String comments, @NotNull RentalStatus rentalStatus) {
+    public CarRental(@NotNull LocalDate startDate, @NotNull LocalDate endDate,
+                     @NotBlank String comments, @NotNull RentalStatus rentalStatus,
+                     @NotNull Car car, @NotNull Customer customer) {
         this.setStartDate(startDate);
         this.setEndDate(endDate);
         this.setComments(comments);
         this.setRentalStatus(rentalStatus);
+        this.setCar(car);
+        this.setCustomer(customer);
     }
 
-    public Long getCarID() {
-        return carID;
+    public Long getCarRentalID() {
+        return carRentalID;
     }
 
-    public void setCarID(Long carID) {
-        this.carID = carID;
+    public void setCarRentalID(Long carRentalID) {
+        this.carRentalID = carRentalID;
     }
 
     public LocalDate getStartDate() {
@@ -74,5 +91,41 @@ public class CarRental {
 
     public void setRentalStatus(RentalStatus rentalStatus) {
         this.rentalStatus = rentalStatus;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        if(this.car != car) {
+            if(this.car != null) {
+                Car tmp = this.car;
+                this.car = null;
+                tmp.removeCar(this, car);
+            }
+            this.car = car;
+            if(car != null) {
+                car.addCar(this);
+            }
+        }
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        if(this.customer != customer) {
+            if(this.customer != null) {
+                Customer tmp = this.customer;
+                this.customer = null;
+                tmp.removeCustomer(this, customer);
+            }
+            this.customer = customer;
+            if(customer != null) {
+                customer.addCustomer(this);
+            }
+        }
     }
 }

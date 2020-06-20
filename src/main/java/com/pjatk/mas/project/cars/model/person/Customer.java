@@ -1,9 +1,12 @@
 package com.pjatk.mas.project.cars.model.person;
 
+import com.pjatk.mas.project.cars.model.CarRental;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Customer extends Person {
@@ -26,6 +29,12 @@ public class Customer extends Person {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "licenseID", referencedColumnName = "licenseID")
     private DrivingLicense drivingLicense;
+
+    //Association with a CarRental
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @NotNull
+    @Column(nullable = false)
+    private final Set<CarRental> carRentals = new HashSet<>();
 
     public Customer(){
         super();
@@ -79,5 +88,19 @@ public class Customer extends Person {
 
     public void setDrivingLicense(DrivingLicense drivingLicense) {
         this.drivingLicense = drivingLicense;
+    }
+
+    public void addCustomer(CarRental carRental) {
+        if(!carRentals.contains(carRental)) {
+            carRentals.add(carRental);
+            carRental.setCustomer(this);
+        }
+    }
+
+    public void removeCustomer(CarRental carRental, Customer newCustomer) {
+        if(carRentals.contains(carRental)) {
+            carRentals.remove(carRental);
+            carRental.setCustomer(newCustomer);
+        }
     }
 }

@@ -92,29 +92,4 @@ public class Engine {
         this.car = car;
     }
 
-    public static Engine createEngine(@NotNull  Car car, @NotBlank String name, @NotNull EngineType type) {
-        if(car == null) {
-            //TODO: replace
-            throw new IllegalArgumentException("Car cannot be null");
-        }
-
-        Engine engine = new Engine(car, name, type);
-        car.addEngine(engine);
-        return engine;
-    }
-
-    public static Engine createEngine(@NotNull  Car car, @NotBlank String name, @NotNull EngineType type, Float litres, Integer cylinders) {
-        if(car == null) {
-            //TODO: replace
-            throw new IllegalArgumentException("Car cannot be null");
-        }
-
-        Engine engine = new Engine(car, name, type, litres, cylinders);
-        car.addEngine(engine);
-        return engine;
-    }
-
-    public static void destroyPart(Engine part) {
-        part.car = null;
-    }
 }
