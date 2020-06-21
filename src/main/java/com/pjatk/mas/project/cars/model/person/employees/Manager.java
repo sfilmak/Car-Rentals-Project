@@ -34,19 +34,18 @@ public class Manager extends Employee {
         super(name, surname, birthdate, salary, workEmail, employeeStatus, hireDate, internshipStartDate, internshipEndDate);
     }
 
-
     public void addCar(Car car) {
         cars.add(car);
         car.getManagers().add(this);
     }
 
-    public void removeTag(Car car) {
+    public void removeCar(Car car) {
         cars.remove(car);
         car.getManagers().remove(this);
     }
 
     public Set<Car> getCars() {
-        return cars;
+        return new HashSet<>(cars);
     }
 
     public void setCars(Set<Car> cars) {
