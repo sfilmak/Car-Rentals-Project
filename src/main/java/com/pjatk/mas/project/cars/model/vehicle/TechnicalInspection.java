@@ -1,6 +1,8 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
 import com.pjatk.mas.project.cars.model.enums.InspectionType;
+import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
+
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -32,14 +34,22 @@ public class TechnicalInspection {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
+    @NotNull(message = "Technical inspection should have a mechanic!")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
+    private Mechanic mechanic;
+
     public TechnicalInspection(){ }
 
-    public TechnicalInspection(@NotNull LocalDate date, boolean arePartsReplaced, double carMileage, InspectionType type, @NotNull Car car) {
+    public TechnicalInspection(@NotNull LocalDate date, boolean arePartsReplaced,
+                               double carMileage, InspectionType type,
+                               @NotNull Car car, @NotNull Mechanic mechanic) {
         this.setDate(date);
         this.setArePartsReplaced(arePartsReplaced);
         this.setCarMileage(carMileage);
         this.setType(type);
         this.setCar(car);
+        this.setMechanic(mechanic);
     }
 
     public LocalDate getDate() {
@@ -91,7 +101,7 @@ public class TechnicalInspection {
             if(this.car != null) {
                 Car tmp = this.car;
                 this.car = null;
-                tmp.removeTechnicalInspection(this, car);
+                tmp.changeTechnicalInspection(this, car);
             }
             this.car = car;
             if(car != null) {
@@ -99,4 +109,23 @@ public class TechnicalInspection {
             }
         }
     }
+
+    public Mechanic getMechanic() {
+        return mechanic;
+    }
+
+    public void setMechanic(Mechanic mechanic) {
+        if(this.mechanic != mechanic) {
+            if(this.mechanic != null) {
+                Mechanic tmp = this.mechanic;
+                this.mechanic = null;
+                tmp.changeTechnicalInspection(this, mechanic);
+            }
+            this.mechanic = mechanic;
+            if(mechanic != null) {
+                mechanic.addTechnicalInspection(this);
+            }
+        }
+    }
+
 }

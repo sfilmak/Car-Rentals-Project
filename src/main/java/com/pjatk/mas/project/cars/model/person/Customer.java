@@ -65,16 +65,16 @@ public class Customer extends Person<Long> {
     }
 
     public void addCustomer(CarRental carRental) {
-        /*if(!carRentals.contains(carRental)) {
+        if(!carRentals.contains(carRental)) {
             carRentals.add(carRental);
             carRental.setCustomer(this);
-        }*/
+        }
     }
 
-    public void removeCustomer(CarRental carRental, Customer newCustomer) {
-        /*if(carRentals.contains(carRental)) {
+    public void changeCustomer(CarRental carRental, Customer newCustomer) {
+        if(carRentals.contains(carRental)) {
             carRentals.remove(carRental);
             carRental.setCustomer(newCustomer);
-        }*/
+        }
     }
 }

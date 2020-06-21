@@ -14,7 +14,6 @@ import java.time.LocalDate;
 //Joined table strategy
 //https://www.tutorialspoint.com/jpa/jpa_advanced_mappings.htm
 @Entity
-@PrimaryKeyJoinColumn(referencedColumnName="personID")
 @AttributeOverride(name="id", column=@Column(name = "EMPLOYEE_ID"))
 @Inheritance( strategy = InheritanceType.JOINED )
 public class Employee extends Person<Long> implements Serializable {
@@ -45,7 +44,7 @@ public class Employee extends Person<Long> implements Serializable {
     }
 
     public Employee(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate, double salary, @NotBlank String workEmail,
-                    EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate, LocalDate internshipEndDate) {
+                    @NotNull EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate, LocalDate internshipEndDate) {
         super(name, surname, birthdate);
         this.setSalary(salary);
         this.setWorkEmail(workEmail);

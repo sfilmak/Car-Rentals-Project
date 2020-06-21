@@ -63,7 +63,7 @@ public class Car {
     @Column(nullable = false)
     private final Set<TechnicalInspection> technicalInspectionsSet = new HashSet<>();
 
-    public Car() { }
+    public Car() {}
 
     public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
         this.setManufacturer(manufacturer);
@@ -160,14 +160,14 @@ public class Car {
         //TODO
     }
 
-    public void addCar(CarRental carRental) {
+    public void addCarRental(CarRental carRental) {
         if(!carRentals.contains(carRental)) {
             carRentals.add(carRental);
             carRental.setCar(this);
         }
     }
 
-    public void removeCar(CarRental carRental, Car newCar) {
+    public void changeCarRental(CarRental carRental, Car newCar) {
         if(carRentals.contains(carRental)) {
             carRentals.remove(carRental);
             carRental.setCar(newCar);
@@ -181,7 +181,7 @@ public class Car {
         }
     }
 
-    public void removeTechnicalInspection(TechnicalInspection technicalInspection, Car newCar) {
+    public void changeTechnicalInspection(TechnicalInspection technicalInspection, Car newCar) {
         if(technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.remove(technicalInspection);
             technicalInspection.setCar(newCar);

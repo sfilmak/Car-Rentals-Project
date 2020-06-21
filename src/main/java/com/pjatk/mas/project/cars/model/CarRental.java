@@ -105,11 +105,11 @@ public class CarRental {
             if(this.car != null) {
                 Car tmp = this.car;
                 this.car = null;
-                tmp.removeCar(this, car);
+                tmp.changeCarRental(this, car);
             }
             this.car = car;
             if(car != null) {
-                car.addCar(this);
+                car.addCarRental(this);
             }
         }
     }
@@ -123,7 +123,7 @@ public class CarRental {
             if(this.customer != null) {
                 Customer tmp = this.customer;
                 this.customer = null;
-                tmp.removeCustomer(this, customer);
+                tmp.changeCustomer(this, customer);
             }
             this.customer = customer;
             if(customer != null) {
