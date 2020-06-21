@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.OrderBonus;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
+import org.hibernate.criterion.Order;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +20,7 @@ public class Consultant extends Employee {
     @NotBlank
     private String workAddress;
 
-    //Association with a OrderBonus
+    //Association with an OrderBonus
     @OneToMany(mappedBy = "consultant", fetch = FetchType.LAZY)
     @NotNull
     @Column(nullable = false)
@@ -46,6 +47,23 @@ public class Consultant extends Employee {
     }
 
     public Set<OrderBonus> getOrderBonuses() {
-        return orderBonuses;
+        return new HashSet<>(orderBonuses);
     }
+
+    public void addOrderBonus(OrderBonus orderBonus) {
+        if(orderBonus == null) {
+            throw new IllegalArgumentException("Order bonus attribute cannot be null");
+        }
+        if(!this.orderBonuses.contains(orderBonus)) {
+            orderBonuses.add(orderBonus);
+        }
+    }
+
+    public void removeOrderBonus(OrderBonus orderBonus) {
+        if(orderBonus == null) {
+            throw new IllegalArgumentException("Order bonus attribute cannot be null");
+        }
+        this.orderBonuses.remove(orderBonus);
+    }
+
 }

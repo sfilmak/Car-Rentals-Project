@@ -1,7 +1,6 @@
 package com.pjatk.mas.project.cars;
 
 import com.pjatk.mas.project.cars.model.CarRental;
-import com.pjatk.mas.project.cars.model.education.College;
 import com.pjatk.mas.project.cars.model.education.University;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
@@ -31,7 +30,8 @@ public class CarSellingProjectApplication {
 									CarRentalRepository carRentalRepo,
 									TechnicalInspectionRepo techRepo,
 									DrivingLicenseRepository drivingLicenseRepo,
-									HRRepo hrRepo) {
+									HRRepo hrRepo,
+									CarRepository carRepo) {
 		return (args) -> {
 			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg");
@@ -63,7 +63,6 @@ public class CarSellingProjectApplication {
 			Car car10 = new Car("Audi", "A3", "Blue", "Hatchback", LocalDate.of(2020, Month.MAY, 6), 90, 200f,
 					"https://habrastorage.org/webt/ar/9u/yz/ar9uyzikg_id4ilafhv9b3412ca.jpeg");
 
-
 			Customer customer1 = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
 					"sidl@gmail.com", "+228", "Nye tvoe delo street");
 
@@ -86,7 +85,7 @@ public class CarSellingProjectApplication {
 			hrRepo.save(newHR);
 			//TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JANUARY, 12), true, 150000L, InspectionType.ENGINE, car1);
 			//techRepo.save(technicalInspection);
-			//carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
+			carRepo.saveAll(Arrays.asList(car3, car4, car5, car6, car7, car8, car9, car10));
 			//customerRepo.save(customer);
 			//Engine engine = Engine.createEngine(car2, "Name", EngineType.ELECTRIC);
 			//engineRepo.save(engine);

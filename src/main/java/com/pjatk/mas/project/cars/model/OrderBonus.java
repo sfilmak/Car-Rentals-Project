@@ -2,9 +2,7 @@ package com.pjatk.mas.project.cars.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.person.employees.Consultant;
-import com.pjatk.mas.project.cars.model.vehicle.Car;
 import org.springframework.data.rest.core.annotation.RestResource;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -29,10 +27,13 @@ public class OrderBonus {
     @RestResource(exported=false)
     private Consultant consultant;
 
+    public OrderBonus(){}
+
     public OrderBonus(double bonusForOrder, @NotNull CarRental carRental, @NotNull(message = "OrderBonus should have a consultant!") Consultant consultant) {
         this.setBonusForOrder(bonusForOrder);
         this.setCarRental(carRental);
         this.setConsultant(consultant);
+        addOrderBonus();
     }
 
     public Long getOrderBonusID() {
@@ -65,5 +66,9 @@ public class OrderBonus {
 
     private void setConsultant(Consultant consultant) {
         this.consultant = consultant;
+    }
+
+    private void addOrderBonus() {
+        getConsultant().addOrderBonus(this);
     }
 }
