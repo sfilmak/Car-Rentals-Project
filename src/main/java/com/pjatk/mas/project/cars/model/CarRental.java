@@ -4,6 +4,7 @@ import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -17,10 +18,12 @@ public class CarRental {
 
     @NotNull
     @Column(columnDefinition = "DATE")
+    @FutureOrPresent
     private LocalDate startDate;
 
     @NotNull
     @Column(columnDefinition = "DATE")
+    @FutureOrPresent
     private LocalDate endDate;
 
     @NotBlank

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@PrimaryKeyJoinColumn(referencedColumnName="employeeID")
+@PrimaryKeyJoinColumn(name="EMPLOYEE_ID")
 public class Mechanic extends Employee {
 
     public Mechanic(){

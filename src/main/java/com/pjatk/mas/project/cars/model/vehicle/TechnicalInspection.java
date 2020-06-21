@@ -2,10 +2,12 @@ package com.pjatk.mas.project.cars.model.vehicle;
 
 import com.pjatk.mas.project.cars.model.enums.InspectionType;
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "TechnicalInspection")
+@Table(name = "technical_inspection")
 public class TechnicalInspection {
 
     @Id
@@ -14,6 +16,7 @@ public class TechnicalInspection {
 
     @NotNull
     @Column(columnDefinition = "DATE")
+    @FutureOrPresent
     private LocalDate date;
 
     private boolean arePartsReplaced;
@@ -29,7 +32,7 @@ public class TechnicalInspection {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    public TechnicalInspection(){}
+    public TechnicalInspection(){ }
 
     public TechnicalInspection(@NotNull LocalDate date, boolean arePartsReplaced, double carMileage, InspectionType type, @NotNull Car car) {
         this.setDate(date);

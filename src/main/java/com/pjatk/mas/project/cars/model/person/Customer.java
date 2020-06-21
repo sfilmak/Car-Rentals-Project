@@ -8,12 +8,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-public class Customer extends Person {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long customerID;
+@Entity(name = "Customer")
+@Table(name = "customer")
+@AttributeOverride(name="id", column=@Column(name = "CUSTOMER_ID"))
+public class Customer extends Person<Long> {
 
     @NotBlank
     private String email;
@@ -23,12 +21,6 @@ public class Customer extends Person {
 
     @NotBlank
     private String address;
-
-    //One-to-one relation sing foreign key
-    @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "licenseID", referencedColumnName = "licenseID")
-    private DrivingLicense drivingLicense;
 
     //Association with a CarRental
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
@@ -41,21 +33,11 @@ public class Customer extends Person {
     }
 
     public Customer(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate,
-                    @NotBlank String email, @NotBlank String phoneNumber, @NotBlank String address,
-                    @NotNull DrivingLicense drivingLicense) {
+                    @NotBlank String email, @NotBlank String phoneNumber, @NotBlank String address) {
         super(name, surname, birthdate);
         this.setEmail(email);
         this.setPhoneNumber(phoneNumber);
         this.setAddress(address);
-        this.setDrivingLicense(drivingLicense);
-    }
-
-    public Long getCustomerID() {
-        return customerID;
-    }
-
-    public void setCustomerID(Long customerID) {
-        this.customerID = customerID;
     }
 
     public String getEmail() {
@@ -82,25 +64,17 @@ public class Customer extends Person {
         this.address = address;
     }
 
-    public DrivingLicense getDrivingLicense() {
-        return drivingLicense;
-    }
-
-    public void setDrivingLicense(DrivingLicense drivingLicense) {
-        this.drivingLicense = drivingLicense;
-    }
-
     public void addCustomer(CarRental carRental) {
-        if(!carRentals.contains(carRental)) {
+        /*if(!carRentals.contains(carRental)) {
             carRentals.add(carRental);
             carRental.setCustomer(this);
-        }
+        }*/
     }
 
     public void removeCustomer(CarRental carRental, Customer newCustomer) {
-        if(carRentals.contains(carRental)) {
+        /*if(carRentals.contains(carRental)) {
             carRentals.remove(carRental);
             carRental.setCustomer(newCustomer);
-        }
+        }*/
     }
 }

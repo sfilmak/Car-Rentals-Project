@@ -5,12 +5,14 @@ import com.pjatk.mas.project.cars.model.CarRental;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Car")
+@Table(name = "car")
 public class Car {
 
     @Id
@@ -31,6 +33,7 @@ public class Car {
 
     @NotNull
     @Column(columnDefinition = "DATE")
+    @PastOrPresent
     private LocalDate dateOfManufacture;
 
     //Should be bigger than 0
@@ -55,7 +58,7 @@ public class Car {
     private final Set<CarRental> carRentals = new HashSet<>();
 
     //Association with a Technical Inspection
-    @OneToMany(mappedBy = "TECHNICAL_INSPECTIONID", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     @NotNull
     @Column(nullable = false)
     private final Set<TechnicalInspection> technicalInspectionsSet = new HashSet<>();
@@ -171,7 +174,7 @@ public class Car {
         }
     }
 
-    public void addTechnicalInspection(TechnicalInspection technicalInspection) {
+   public void addTechnicalInspection(TechnicalInspection technicalInspection) {
         if(!technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.add(technicalInspection);
             technicalInspection.setCar(this);

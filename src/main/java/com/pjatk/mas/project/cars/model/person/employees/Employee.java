@@ -4,20 +4,20 @@ import com.pjatk.mas.project.cars.model.person.Person;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 //Joined table strategy
 //https://www.tutorialspoint.com/jpa/jpa_advanced_mappings.htm
 @Entity
-@Table
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Employee extends Person {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long employeeID;
+@PrimaryKeyJoinColumn(referencedColumnName="personID")
+@AttributeOverride(name="id", column=@Column(name = "EMPLOYEE_ID"))
+@Inheritance( strategy = InheritanceType.JOINED )
+public class Employee extends Person<Long> implements Serializable {
 
     private double salary;
 
@@ -25,12 +25,15 @@ public class Employee extends Person {
     private String workEmail;
 
     @Column(columnDefinition = "DATE")
+    @PastOrPresent
     private LocalDate hireDate;
 
     @Column(columnDefinition = "DATE")
+    @PastOrPresent
     private LocalDate internshipStartDate;
 
     @Column(columnDefinition = "DATE")
+    @FutureOrPresent
     private LocalDate internshipEndDate;
 
     @Enumerated(EnumType.STRING)
@@ -47,14 +50,6 @@ public class Employee extends Person {
         this.setSalary(salary);
         this.setWorkEmail(workEmail);
         this.setEmployeeStatus(employeeStatus, hireDate, internshipStartDate, internshipEndDate);
-    }
-
-    public Long getEmployeeID() {
-        return employeeID;
-    }
-
-    public void setEmployeeID(Long employeeID) {
-        this.employeeID = employeeID;
     }
 
     public double getSalary() {
