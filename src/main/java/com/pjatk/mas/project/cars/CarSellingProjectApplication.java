@@ -1,9 +1,13 @@
 package com.pjatk.mas.project.cars;
 
 import com.pjatk.mas.project.cars.model.CarRental;
+import com.pjatk.mas.project.cars.model.education.College;
+import com.pjatk.mas.project.cars.model.education.University;
+import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
+import com.pjatk.mas.project.cars.model.person.employees.HR;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
 import com.pjatk.mas.project.cars.repos.crud.*;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +30,8 @@ public class CarSellingProjectApplication {
 									EngineRepo engineRepo,
 									CarRentalRepository carRentalRepo,
 									TechnicalInspectionRepo techRepo,
-									DrivingLicenseRepository drivingLicenseRepo) {
+									DrivingLicenseRepository drivingLicenseRepo,
+									HRRepo hrRepo) {
 		return (args) -> {
 			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg");
@@ -72,6 +77,13 @@ public class CarSellingProjectApplication {
 			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), "Comments", RentalStatus.PLANNED, car2, customer2);
 			carRentalRepo.saveAll(Arrays.asList(carRental1, carRental2));
 			drivingLicenseRepo.saveAll(Arrays.asList(drivingLicense, drivingLicense2));
+
+			HR newHR = new HR("Viktor", "Litovchenko", LocalDate.of(2000, Month.MAY, 28),
+					3000, "nu_da@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null);
+
+			newHR.addUniversity(new University("PJATK", "Warsaw", "Poland"));
+
+			hrRepo.save(newHR);
 			//TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JANUARY, 12), true, 150000L, InspectionType.ENGINE, car1);
 			//techRepo.save(technicalInspection);
 			//carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
