@@ -1,5 +1,6 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.person.employees.Manager;
 
@@ -52,16 +53,19 @@ public class Car {
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     @NotNull
     @Column(nullable = false)
+    @JsonIgnore
     private final Set<CarRental> carRentals = new HashSet<>();
 
     //Association with a Technical Inspection
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     @NotNull
     @Column(nullable = false)
+    @JsonIgnore
     private final Set<TechnicalInspection> technicalInspectionsSet = new HashSet<>();
 
     //Association with managers
     @ManyToMany(mappedBy = "cars")
+    @JsonIgnore
     private Set<Manager> managers = new HashSet<>();
 
     public Car() { }
@@ -223,14 +227,17 @@ public class Car {
         manager.getCars().remove(this);
     }
 
+    @JsonIgnore
     public Set<CarRental> getCarRentals() {
         return carRentals;
     }
 
+    @JsonIgnore
     public Set<TechnicalInspection> getTechnicalInspectionsSet() {
         return technicalInspectionsSet;
     }
 
+    @JsonIgnore
     public Set<Manager> getManagers() {
         return managers;
     }

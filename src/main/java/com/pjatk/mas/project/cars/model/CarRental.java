@@ -1,8 +1,11 @@
 package com.pjatk.mas.project.cars.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
+import org.springframework.data.rest.core.annotation.RestResource;
+
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
@@ -36,11 +39,15 @@ public class CarRental {
     @NotNull(message = "CarRental should have a car!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "car_id", nullable = false)
+    @JsonManagedReference
+    @RestResource(exported=false)
     private Car car;
 
     @NotNull(message = "CarRental should have a customer!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonManagedReference
+    @RestResource(exported=false)
     private Customer customer;
 
     public CarRental(){}

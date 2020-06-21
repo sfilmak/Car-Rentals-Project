@@ -1,4 +1,4 @@
-package com.pjatk.mas.project.cars.repos;
+package com.pjatk.mas.project.cars.repos.crud;
 
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
 import org.springframework.data.repository.CrudRepository;

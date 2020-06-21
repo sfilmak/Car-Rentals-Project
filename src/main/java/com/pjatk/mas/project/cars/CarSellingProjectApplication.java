@@ -1,13 +1,11 @@
 package com.pjatk.mas.project.cars;
 
 import com.pjatk.mas.project.cars.model.CarRental;
-import com.pjatk.mas.project.cars.model.enums.EngineType;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
-import com.pjatk.mas.project.cars.model.vehicle.Engine;
-import com.pjatk.mas.project.cars.repos.*;
+import com.pjatk.mas.project.cars.repos.crud.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

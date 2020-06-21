@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import GridListTileBar from "@material-ui/core/GridListTileBar";
@@ -161,14 +161,15 @@ const GridCellRight = styled.div`
     }
 `;
 
-const CarInfo = ({ cars }) => {
+const CarInfo = ({cars, customers}) => {
     const classes = useStyles();
     const search = window.location.search;
     const params = new URLSearchParams(search);
     const carID = parseInt(params.get('id'));
-    const [customerID, setCustomerID] = React.useState('');
-    const [ti_ID, setTiID] = React.useState('');
-    const [mechanicID, setMechanicID] = React.useState('');
+    const [customerID, setCustomerID] = useState('');
+    const [ti_ID, setTiID] = useState('');
+    const [mechanicID, setMechanicID] = useState('');
+    const [services, setServices] = useState([]);
 
     const handleCustomerSelection = (event) => {
         setCustomerID(event.target.value);
@@ -185,8 +186,9 @@ const CarInfo = ({ cars }) => {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        setOpen(true);
+        //loadListOfServices();
     };
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -194,6 +196,7 @@ const CarInfo = ({ cars }) => {
     let ourCar = cars.filter(function (car) {
         return car.carID === carID
     });
+
 
     return (
         <div>
@@ -206,7 +209,8 @@ const CarInfo = ({ cars }) => {
                                 <img src={car.imageURL}/>
                                 <GridListTileBar className={classes.gridSubtile}
                                                  title={<b className={classes.title}>{car.manufacturer} {car.model}</b>}
-                                                 subtitle={<span className={classes.subtitle}>{car.pricePerDay}$/day</span>}
+                                                 subtitle={<span
+                                                     className={classes.subtitle}>{car.pricePerDay}$/day</span>}
                                 />
                             </GridListTile>
                             <Button size="large"
@@ -230,7 +234,7 @@ const CarInfo = ({ cars }) => {
                                             <DriveEtaIcon/>
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary="Engine type" secondary="Placeholder TODO"/>
+                                    <ListItemText primary="Engine" secondary="Placeholder TODO"/>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemAvatar>
@@ -264,9 +268,10 @@ const CarInfo = ({ cars }) => {
                                             id="customer-selector"
                                             value={customerID}
                                             onChange={handleCustomerSelection}>
-                                            <MenuItem value={1}>Artsiom Paliaschuk</MenuItem>
-                                            <MenuItem value={2}>Oleksandr Sidletskyi</MenuItem>
-                                            <MenuItem value={3}>Yuta Maejima</MenuItem>
+                                            {customers.map((customer) => (
+                                                <MenuItem
+                                                    value={customer.id}>{customer.name} {customer.surname}</MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                     <h2 className={classes.formTitle}>Select date of start</h2>
@@ -338,14 +343,14 @@ const CarInfo = ({ cars }) => {
                         </GridCellRight>
                     </GridHalf>
                 </div>
-            ))): (
+            ))) : (
                 <b className={classes.notFoundLabel}>No car found with this ID</b>
             )}
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                     Service history
                 </DialogTitle>
-                <CustomizedDialogs/>
+                <CustomizedDialogs listOfServices={services}/>
             </Dialog>
         </div>
     );

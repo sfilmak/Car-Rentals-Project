@@ -25,7 +25,7 @@ const styles = (theme) => ({
     },
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     carInfoList: {
         width: '100%',
     },
@@ -48,36 +48,26 @@ export const DialogTitle = withStyles(styles)((props) => {
     );
 });
 
-const DialogContent = withStyles((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
-}))(MuiDialogContent);
-
-export default function CustomizedDialogs() {
+const CustomizedDialogs = ({listOfServices}) => {
     const classes = useStyles();
     return (
         <div>
-                <DialogContent dividers>
-                    <List className={classes.carInfoList}>
+            <MuiDialogContent className={classes.dialogContent} dividers>
+                <List className={classes.carInfoList}>
+                    {listOfServices.map((service) => (
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar className={classes.list_avatar}>
                                     <HistoryIcon/>
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary="Oil change" secondary="20-05-2020"/>
+                            <ListItemText primary={service.type} secondary={<p>{service.date} | {service.carMileage}</p>}/>
                         </ListItem>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar className={classes.list_avatar}>
-                                    <HistoryIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary="General inspection" secondary="05-05-2020"/>
-                        </ListItem>
-                    </List>
-                </DialogContent>
+                    ))}
+                </List>
+            </MuiDialogContent>
         </div>
     );
-}
+};
+
+export default CustomizedDialogs;

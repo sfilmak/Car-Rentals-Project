@@ -12,7 +12,8 @@ import {
 
 class App extends Component {
 	state = {
-		cars: []
+		cars: [],
+		customers: [],
 	};
 
 	componentDidMount() {
@@ -21,7 +22,13 @@ class App extends Component {
 			.then((data) => {
 				this.setState({ cars: data._embedded.cars })
 			})
-			.catch(console.log)
+
+		fetch('api/customers')
+			.then(res => res.json())
+			.then((data) => {
+				this.setState({ customers: data._embedded.customers })
+				//setCustomers(data._embedded.customers);
+			})
 	}
 
 	render() {
@@ -34,7 +41,7 @@ class App extends Component {
 							<Cars cars={this.state.cars} />
 						</Route>
 						<Route path="/carInfo">
-							<CarInfo cars={this.state.cars}/>
+							<CarInfo cars={this.state.cars} customers={this.state.customers}/>
 						</Route>
 					</Switch>
 				</div>
