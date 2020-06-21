@@ -1,7 +1,6 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
 import com.pjatk.mas.project.cars.model.enums.EngineType;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,8 +25,9 @@ public class Engine {
 
     private Integer cylinders;
 
-    //Composition part
-    @OneToOne
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
     private Car car;
 
     public Engine(){}
@@ -42,6 +42,23 @@ public class Engine {
         this(car, name, type);
         this.setLitres(litres);
         this.setCylinders(cylinders);
+    }
+
+    public static Engine createEngine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type){
+        Engine engine = new Engine(car, name, type);
+        car.addEngine(engine);
+        return engine;
+    }
+
+    public static Engine createEngine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type,
+            Float litres, Integer cylinders){
+        Engine engine = new Engine(car, name, type, litres, cylinders);
+        car.addEngine(engine);
+        return engine;
+    }
+
+    public static void destroyPart(Engine engine) {
+        engine.car = null;
     }
 
     public String getName() {
