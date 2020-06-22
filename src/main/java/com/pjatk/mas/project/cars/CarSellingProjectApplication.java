@@ -117,8 +117,6 @@ public class CarSellingProjectApplication {
 
 			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JULY, 29), true, 150000L, InspectionType.ENGINE, car3, newMechanic);
 			techRepo.save(technicalInspection);
-
 		};
 	}
-
 }

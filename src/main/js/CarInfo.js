@@ -24,6 +24,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Dialog from "@material-ui/core/Dialog";
 import styled from "styled-components";
+import dayjs from "dayjs";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -161,7 +162,7 @@ const GridCellRight = styled.div`
     }
 `;
 
-const CarInfo = ({cars, customers}) => {
+const CarInfo = ({cars, customers, specializations}) => {
     const classes = useStyles();
     const search = window.location.search;
     const params = new URLSearchParams(search);
@@ -170,27 +171,85 @@ const CarInfo = ({cars, customers}) => {
     const [ti_ID, setTiID] = useState('');
     const [mechanicID, setMechanicID] = useState('');
     const [services, setServices] = useState([]);
-
+    const [mechanics, setMechanics] = useState([]);
+    const [carRentals, setCarRentals] = useState([]);
     const [engine, setEngine] = useState('')
+    const [startDate, setStartDate] = useState(dayjs())
 
-    useEffect(()=>{
+    const [isCustomerSelected, setIsCustomerSelected] = useState(false);
+    const [isStartDateCorrect, setISStartDateCorrect] = useState(false);
+    const [isEndDateCorrect, setIsEndDateCorrect] = useState(false);
+    const [isReviewTypeSelected, setIsReviewTypeSelected] = useState(false);
+    const [isMechanicSelected, setIsMechanicSelected] = useState(false);
+
+    const handleStartDateChange = () => {
+        const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
+        console.log("HandleStartDateChange");
+        setISStartDateCorrect(!checkIsDateBetweenDates(receivedDate));
+        setStartDate(receivedDate)
+    };
+
+    const handleEndDateChange = () => {
+        const receivedEndDate = dayjs(document.getElementById("rentalEndDate").value);
+        console.log("HandleEndDateChange: " + document.getElementById("rentalEndDate").value);
+        const notBetweenCurrDates = !checkIsDateBetweenDates(receivedEndDate);
+        const afterStartDate = receivedEndDate.isAfter(startDate)
+        //const oldDatesNotBetweenNew = !checkIsDateBetweenDates(receivedEndDate);
+        setIsEndDateCorrect(notBetweenCurrDates && afterStartDate);
+    };
+
+    function checkIsDateBetweenDates(givenDate) {
+        for (let i = 0; i < carRentals.length; i++) {
+            if (validateDateBetweenTwoDates(dayjs(carRentals[i].startDate), dayjs(carRentals[i].endDate), givenDate)) {
+                console.log('You cannot rent this car in this time period!');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function validateDateBetweenTwoDates(startDate, endDate, givenDate) {
+        return givenDate.isBefore(endDate) && givenDate.isAfter(startDate);
+    }
+
+    useEffect(() => {
         fetch('api/cars/' + carID + '/engine')
             .then(res => res.json())
             .then((data) => {
                 setEngine(data)
             })
+
+        fetch('api/cars/' + carID + '/carRentals')
+            .then(res => res.json())
+            .then((data) => {
+                setCarRentals(data._embedded.carRentals)
+            })
+        fetch('api/cars/' + carID + '/carRentals')
+            .then(res => res.json())
+            .then((data) => {
+                setCarRentals(data._embedded.carRentals)
+            })
     }, [])
 
     const handleCustomerSelection = (event) => {
         setCustomerID(event.target.value);
+        setIsCustomerSelected(true);
     };
 
     const handleTechnicalInspectionSelection = (event) => {
         setTiID(event.target.value);
+        //Load mechanics
+        fetch('api/specializations/' + event.target.value + '/mechanics')
+            .then(res => res.json())
+            .then((data) => {
+                setMechanics(data._embedded.mechanics)
+                setIsReviewTypeSelected(true);
+            })
     };
 
     const handleMechanicSelection = (event) => {
         setMechanicID(event.target.value);
+        setIsMechanicSelected(true);
     };
 
     const [open, setOpen] = React.useState(false);
@@ -207,14 +266,13 @@ const CarInfo = ({cars, customers}) => {
         loadListOfServices();
     };
 
-    function loadListOfServices(){
+    function loadListOfServices() {
         fetch('api/cars/' + carID + '/technicalInspectionsSet')
             .then(res => res.json())
             .then((data) => {
                 setServices(data._embedded.technicalInspections);
                 setOpen(true);
             })
-            .catch(console.log);
     }
 
     return (
@@ -253,7 +311,8 @@ const CarInfo = ({cars, customers}) => {
                                             <FavoriteIcon/>
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary="Engine" secondary={<span>{engine.name} | {engine.type}</span>}/>
+                                    <ListItemText primary="Engine"
+                                                  secondary={<span>{engine.name} | {engine.type}</span>}/>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemAvatar>
@@ -296,9 +355,11 @@ const CarInfo = ({cars, customers}) => {
                                     <h2 className={classes.formTitle}>Select date of start</h2>
                                     <form className={classes.container} noValidate>
                                         <TextField
+                                            disabled={!isCustomerSelected}
                                             id="rentalStartDate"
                                             label="Rental start date"
                                             type="date"
+                                            onChange={handleStartDateChange}
                                             className={classes.textField}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -307,9 +368,11 @@ const CarInfo = ({cars, customers}) => {
                                     <h2 className={classes.formTitle}>Select date of end</h2>
                                     <form className={classes.container} noValidate>
                                         <TextField
+                                            disabled={!isStartDateCorrect}
                                             id="rentalEndDate"
                                             label="Rental end date"
                                             type="date"
+                                            onChange={handleEndDateChange}
                                             className={classes.textField}
                                             InputLabelProps={{
                                                 shrink: true,
@@ -319,13 +382,15 @@ const CarInfo = ({cars, customers}) => {
                                     <FormControl className={classes.formControl}>
                                         <InputLabel>Technical review type</InputLabel>
                                         <Select
+                                            disabled={!isEndDateCorrect}
                                             className={classes.selectorColor}
                                             id="technical-review-type-selector"
                                             value={ti_ID}
                                             onChange={handleTechnicalInspectionSelection}>
-                                            <MenuItem value={100}>Type 1</MenuItem>
-                                            <MenuItem value={200}>Type 2</MenuItem>
-                                            <MenuItem value={300}>Type 3</MenuItem>
+                                            {specializations.map((specialization) => (
+                                                <MenuItem value={specialization.specializationID}>{
+                                                    <span>{specialization.experience} + {specialization.inspectionType}</span>}</MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
 
@@ -333,13 +398,15 @@ const CarInfo = ({cars, customers}) => {
                                     <FormControl className={classes.formControl}>
                                         <InputLabel>Mechanic</InputLabel>
                                         <Select
+                                            disabled={!isReviewTypeSelected}
                                             className={classes.selectorColor}
                                             id="mechanic-selector"
                                             value={mechanicID}
                                             onChange={handleMechanicSelection}>
-                                            <MenuItem value={12}>Mechanic 1</MenuItem>
-                                            <MenuItem value={15}>Mechanic 2</MenuItem>
-                                            <MenuItem value={16}>Mechanic 3</MenuItem>
+                                            {mechanics.map((mechanic) => (
+                                                <MenuItem value={mechanic.id}>{
+                                                    <span>{mechanic.name} {mechanic.surname}</span>}</MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
 
@@ -354,7 +421,8 @@ const CarInfo = ({cars, customers}) => {
                                                    shrink: true,
                                                }}
                                     />
-                                    <Button variant="contained" size="large" className={classes.bookButton}>
+                                    <Button disabled={!isMechanicSelected} variant="contained" size="large"
+                                            className={classes.bookButton}>
                                         Book a car
                                     </Button>
                                 </div>

@@ -262,13 +262,16 @@ public class Car {
         return engine;
     }
 
-    //TODO
-    public void setPricePerDay(float pricePerDay) {
+    public void setPricePerDay(float pricePerDay){
         this.pricePerDay = pricePerDay;
     }
 
-    public void setPricePerDay(float pricePerDay, float tax) {
-        this.pricePerDay = pricePerDay + tax;
+    public static void setPricePerDay(Car car, float pricePerDay) {
+        car.setPricePerDay(pricePerDay);
+    }
+
+    public static void setPricePerDay(Car car, float pricePerDay, float tax) {
+        car.setPricePerDay(pricePerDay + tax);
     }
 
     @Override

@@ -70,7 +70,7 @@ public class CarRental {
         this.setStartDate(startDate);
         this.setEndDate(endDate);
         this.setComments(comments);
-        this.setRentalStatus(rentalStatus);
+        this.changeRentalStatus(rentalStatus);
         this.setCar(car);
         this.setCustomer(customer);
     }
@@ -109,10 +109,6 @@ public class CarRental {
 
     public RentalStatus getRentalStatus() {
         return rentalStatus;
-    }
-
-    public void setRentalStatus(RentalStatus rentalStatus) {
-        this.rentalStatus = rentalStatus;
     }
 
     public Car getCar() {
@@ -156,7 +152,7 @@ public class CarRental {
         this.endDate = endDate;
     }
 
-    public void changeRentaStatus(@NotNull RentalStatus rentalStatus){
+    public void changeRentalStatus(@NotNull RentalStatus rentalStatus){
         this.rentalStatus = rentalStatus;
     }
 

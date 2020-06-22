@@ -2,7 +2,9 @@ package com.pjatk.mas.project.cars.ui;
 
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
+import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Specialization;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -14,5 +16,7 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Car.class);
         config.exposeIdsFor(Customer.class);
         config.exposeIdsFor(DrivingLicense.class);
+        config.exposeIdsFor(Mechanic.class);
+        config.exposeIdsFor(Specialization.class);
     }
 }
