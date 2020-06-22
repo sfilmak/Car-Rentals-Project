@@ -67,13 +67,14 @@ public class Car {
     @JsonIgnore
     private Set<Manager> managers = new HashSet<>();
 
-    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL,
+    @OneToOne(mappedBy = "car",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY, optional = false)
     private Engine engine;
 
     public Car() { }
 
-     private Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
+    private Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
         this.setManufacturer(manufacturer);
         this.setModel(model);
         this.setColor(color);
@@ -206,15 +207,6 @@ public class Car {
     }
 
     @Override
-    public String toString() {
-        return "Car{" +
-                "carID=" + carID +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", model='" + model + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -230,13 +222,17 @@ public class Car {
     }
 
     public void addManager(Manager manager) {
-        managers.add(manager);
-        manager.getCars().add(this);
+        if(!managers.contains(manager)){
+            managers.add(manager);
+            manager.getCars().add(this);
+        }
     }
 
     public void removeManager(Manager manager) {
-        managers.remove(manager);
-        manager.getCars().remove(this);
+        if(managers.contains(manager)){
+            managers.remove(manager);
+            manager.getCars().remove(this);
+        }
     }
 
     @JsonIgnore
@@ -273,5 +269,19 @@ public class Car {
 
     public void setPricePerDay(float pricePerDay, float tax) {
         this.pricePerDay = pricePerDay + tax;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "carID=" + carID +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", carType='" + carType + '\'' +
+                ", dateOfManufacture=" + dateOfManufacture +
+                ", pricePerDay=" + pricePerDay +
+                ", maxSpeed=" + maxSpeed +
+                '}';
     }
 }

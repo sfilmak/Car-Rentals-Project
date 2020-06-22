@@ -74,10 +74,11 @@ public class Employee extends Person<Long> implements Serializable {
     public void setHireDate(LocalDate hireDate) {
         if(this.getEmployeeStatus() == EmployeeStatus.FULLTIME) {
             if(hireDate == null) {
+                //TODO replace
                 throw new IllegalArgumentException("Hire date cannot be null if employee status is FULLTIME WORKER");
             }
         } else if(this.getEmployeeStatus() == EmployeeStatus.INTERN) {
-            if((hireDate != null)) {
+            if(hireDate != null) {
                 throw new IllegalArgumentException("Hire date cannot be set if the status is " + this.getEmployeeStatus().toString());
             }
         }
@@ -94,7 +95,7 @@ public class Employee extends Person<Long> implements Serializable {
                 throw new IllegalArgumentException("Internship start date cannot be null if employee status is INTERN");
             }
         } else if(this.getEmployeeStatus() == EmployeeStatus.FULLTIME) {
-            if((internshipStartDate != null)) {
+            if(internshipStartDate != null) {
                 throw new IllegalArgumentException("Internship start date cannot be set if the status is " + this.getEmployeeStatus().toString());
             }
         }
@@ -112,7 +113,7 @@ public class Employee extends Person<Long> implements Serializable {
                 throw new IllegalArgumentException("Internship end date cannot be null if employee status is INTERN");
             }
         } else if(this.getEmployeeStatus() == EmployeeStatus.FULLTIME) {
-            if((internshipEndDate != null)) {
+            if(internshipEndDate != null) {
                 throw new IllegalArgumentException("Internship end date cannot be set if the status is " + this.getEmployeeStatus().toString());
             }
         }
@@ -122,7 +123,7 @@ public class Employee extends Person<Long> implements Serializable {
 
     public void setEmployeeStatus(EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate, LocalDate internshipEndDate) {
         if(employeeStatus == null) {
-            throw new IllegalArgumentException("Employee tatus cannot be null");
+            throw new IllegalArgumentException("Employee status cannot be null");
         }
 
         this.employeeStatus = employeeStatus;

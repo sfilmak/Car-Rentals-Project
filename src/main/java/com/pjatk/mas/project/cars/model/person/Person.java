@@ -29,7 +29,7 @@ public abstract class Person<PK extends Serializable> implements Serializable {
 
     public Person(){}
 
-    public Person(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate) {
+    public Person(@NotBlank String name, @NotBlank String surname, @NotNull @Past LocalDate birthdate) {
         this.setName(name);
         this.setSurname(surname);
         this.setBirthdate(birthdate);
@@ -59,6 +59,7 @@ public abstract class Person<PK extends Serializable> implements Serializable {
         this.birthdate = birthdate;
     }
 
+    //Derived attribute
     public int getAge(){
         return Period.between(getBirthdate(), LocalDate.now()).getYears();
     }

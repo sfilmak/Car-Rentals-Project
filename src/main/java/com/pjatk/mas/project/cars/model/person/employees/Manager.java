@@ -15,14 +15,10 @@ import java.util.Set;
 public class Manager extends Employee {
 
     //Association with cars
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "car_manager",
             joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "car_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "car_id"))
     private Set<Car> cars = new HashSet<>();
 
     public Manager(){
@@ -34,14 +30,18 @@ public class Manager extends Employee {
         super(name, surname, birthdate, salary, workEmail, employeeStatus, hireDate, internshipStartDate, internshipEndDate);
     }
 
-    public void addCar(Car car) {
-        cars.add(car);
-        car.getManagers().add(this);
+    public void addCar(@NotNull Car car) {
+        if(!cars.contains(car)){
+            cars.add(car);
+            car.getManagers().add(this);
+        }
     }
 
-    public void removeCar(Car car) {
-        cars.remove(car);
-        car.getManagers().remove(this);
+    public void removeCar(@NotNull Car car) {
+        if(cars.contains(car)){
+            cars.remove(car);
+            car.getManagers().remove(this);
+        }
     }
 
     public Set<Car> getCars() {

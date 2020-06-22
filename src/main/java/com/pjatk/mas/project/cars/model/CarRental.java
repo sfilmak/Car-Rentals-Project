@@ -50,7 +50,7 @@ public class CarRental {
     @RestResource(exported=false)
     private Customer customer;
 
-    @NotNull
+    @NotNull(message = "CarRental should have an order bonus!")
     @OneToOne(mappedBy = "carRental",
             fetch = FetchType.LAZY, optional = false,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
@@ -160,7 +160,7 @@ public class CarRental {
         return orderBonus;
     }
 
-    public void setOrderBonus(OrderBonus orderBonus) {
+    public void setOrderBonus(@NotNull OrderBonus orderBonus) {
         this.orderBonus = orderBonus;
     }
 }

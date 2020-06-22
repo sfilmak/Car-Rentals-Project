@@ -18,7 +18,9 @@ public class HR extends Employee {
     //Association with university
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
     })
     @JoinTable(name = "university_hr",
             joinColumns = @JoinColumn(name = "employee_id"),
@@ -29,7 +31,9 @@ public class HR extends Employee {
     //Association with college
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
     })
     @JoinTable(name = "college_hr",
             joinColumns = @JoinColumn(name = "employee_id"),

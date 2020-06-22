@@ -29,7 +29,8 @@ public class Customer extends Person<Long> {
     private final Set<CarRental> carRentals = new HashSet<>();
 
     @NotNull
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL,
+    @OneToOne(mappedBy = "customer",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY, optional = false)
     private DrivingLicense drivingLicense;
 
@@ -39,7 +40,7 @@ public class Customer extends Person<Long> {
 
     public Customer(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate,
                     @NotBlank String email, @NotBlank String phoneNumber, @NotBlank String address,
-
+                    //Driving license part (composition):
                     @NotNull Long licenseID, @NotNull LocalDate dateOfIssue,
                     @NotBlank String countryOfIssue) {
         super(name, surname, birthdate);
@@ -99,4 +100,6 @@ public class Customer extends Person<Long> {
     public static void isAllowedInPoland(Long licenseID){
         //TODO
     }
+
+
 }

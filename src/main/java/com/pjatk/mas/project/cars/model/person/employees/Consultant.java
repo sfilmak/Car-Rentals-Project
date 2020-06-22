@@ -26,9 +26,9 @@ public class Consultant extends Employee {
 
     public Consultant(){ super(); }
 
-    public Consultant(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate, double salary, @NotBlank String workEmail,
-                      @NotNull EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate,
-                      LocalDate internshipEndDate, @NotBlank String workAddress){
+    public Consultant(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate, double salary,
+                      @NotBlank String workEmail, @NotNull EmployeeStatus employeeStatus, LocalDate hireDate,
+                      LocalDate internshipStartDate, LocalDate internshipEndDate, @NotBlank String workAddress){
         super(name, surname, birthdate, salary, workEmail, employeeStatus, hireDate, internshipStartDate, internshipEndDate);
         this.setWorkAddress(workAddress);
     }
@@ -54,10 +54,8 @@ public class Consultant extends Employee {
         }
     }
 
-    public void removeOrderBonus(OrderBonus orderBonus) {
-        if(orderBonus == null) {
-            throw new IllegalArgumentException("Order bonus attribute cannot be null");
-        }
-        this.orderBonuses.remove(orderBonus);
-    }
+    //It is not possible to remove order bonus
+    //Because of the 1-1 relation between OrderBonus and CarRental
+    //It means that Consultant will always get a bonus
+    //for any rental, but this bonus may be set to 0
 }
