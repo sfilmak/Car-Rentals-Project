@@ -1,7 +1,9 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.enums.InspectionType;
 import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
@@ -29,15 +31,19 @@ public class TechnicalInspection {
     @Enumerated(EnumType.STRING)
     private InspectionType type;
 
-    @NotNull(message = "Technical inspection should have a car!")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "car_id", nullable = false)
-    private Car car;
-
     @NotNull(message = "Technical inspection should have a mechanic!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "EMPLOYEE_ID", nullable = false)
+    @JsonManagedReference
+    @RestResource(exported=false)
     private Mechanic mechanic;
+
+    @NotNull(message = "Technical inspection should have a car!")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "car_id", nullable = false)
+    @JsonManagedReference
+    @RestResource(exported=false)
+    private Car car;
 
     public TechnicalInspection(){ }
 
@@ -127,5 +133,4 @@ public class TechnicalInspection {
             }
         }
     }
-
 }

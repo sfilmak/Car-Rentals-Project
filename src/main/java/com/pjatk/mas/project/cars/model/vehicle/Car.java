@@ -63,7 +63,7 @@ public class Car {
     private final Set<TechnicalInspection> technicalInspectionsSet = new HashSet<>();
 
     //Association with managers
-    @ManyToMany(mappedBy = "cars")
+    @ManyToMany(mappedBy = "cars", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Manager> managers = new HashSet<>();
 

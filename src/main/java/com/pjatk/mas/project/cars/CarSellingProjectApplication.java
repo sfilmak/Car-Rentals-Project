@@ -5,11 +5,15 @@ import com.pjatk.mas.project.cars.model.OrderBonus;
 import com.pjatk.mas.project.cars.model.education.University;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
 import com.pjatk.mas.project.cars.model.enums.EngineType;
+import com.pjatk.mas.project.cars.model.enums.InspectionType;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.employees.Consultant;
 import com.pjatk.mas.project.cars.model.person.employees.HR;
+import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Specialization;
+import com.pjatk.mas.project.cars.model.vehicle.TechnicalInspection;
 import com.pjatk.mas.project.cars.repos.crud.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -76,6 +80,8 @@ public class CarSellingProjectApplication {
 					"https://habrastorage.org/webt/ar/9u/yz/ar9uyzikg_id4ilafhv9b3412ca.jpeg",
 					"Audi Engine", EngineType.ELECTRIC);
 
+			carRepo.saveAll(Arrays.asList(car4, car5, car6, car7, car8, car9, car10));
+
 			Customer customer1 = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
 					"sidl@gmail.com", "+228", "Nye tvoe delo street",
 					228L, LocalDate.of(2019, Month.JUNE, 5), "Polska");
@@ -88,12 +94,8 @@ public class CarSellingProjectApplication {
 					"ksks@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2020, Month.JANUARY, 16),
 					null, null, "Warsaw");
 
-			//customerRepo.saveAll(Arrays.asList(customer1,customer2));
-			//carRepo.saveAll(Arrays.asList(car1, car2, car3, car4, car5, car6, car7, car8, car9, car10));
-
-			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.JUNE, 22), LocalDate.of(2020, Month.JUNE, 24), "Comments", RentalStatus.PLANNED, car1, customer1);
-			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), "Comments", RentalStatus.PLANNED, car2, customer2);
-			//carRentalRepo.saveAll(Arrays.asList(carRental1, carRental2));
+			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.AUGUST, 22), LocalDate.of(2020, Month.AUGUST, 24), "Comments", RentalStatus.PLANNED, car1, customer1);
+			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), "Another message example", RentalStatus.PLANNED, car2, customer2);
 
 			OrderBonus orderBonus = new OrderBonus(500, carRental1, consultant1);
 			OrderBonus orderBonus2 = new OrderBonus(400, carRental2, consultant1);
@@ -106,9 +108,15 @@ public class CarSellingProjectApplication {
 			newHR.addUniversity(new University("PJATK", "Warsaw", "Poland"));
 
 			hrRepo.save(newHR);
-			//TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JANUARY, 12), true, 150000L, InspectionType.ENGINE, car1);
-			//techRepo.save(technicalInspection);
 
+			Specialization specialization = new Specialization("Strong", InspectionType.ENGINE);
+
+			Mechanic newMechanic = new Mechanic("Viktor", "Litovchenko", LocalDate.of(2000, Month.MAY, 28),
+					3000, "nu_da@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
+					specialization);
+
+			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JULY, 29), true, 150000L, InspectionType.ENGINE, car3, newMechanic);
+			techRepo.save(technicalInspection);
 
 		};
 	}
