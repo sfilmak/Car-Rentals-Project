@@ -32,33 +32,16 @@ public class Engine {
 
     public Engine(){}
 
-    private Engine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type) {
+    Engine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type) {
         this.setCar(car);
         this.setName(name);
         this.setType(type);
     }
 
-    private Engine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type, Float litres, Integer cylinders) {
+    Engine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type, Float litres, Integer cylinders) {
         this(car, name, type);
         this.setLitres(litres);
         this.setCylinders(cylinders);
-    }
-
-    public static Engine createEngine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type){
-        Engine engine = new Engine(car, name, type);
-        car.addEngine(engine);
-        return engine;
-    }
-
-    public static Engine createEngine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type,
-            Float litres, Integer cylinders){
-        Engine engine = new Engine(car, name, type, litres, cylinders);
-        car.addEngine(engine);
-        return engine;
-    }
-
-    public static void destroyPart(Engine engine) {
-        engine.car = null;
     }
 
     public String getName() {
@@ -105,7 +88,7 @@ public class Engine {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(Car car){
         this.car = car;
     }
 

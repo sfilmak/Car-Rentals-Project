@@ -5,7 +5,6 @@ import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
 import org.springframework.data.rest.core.annotation.RestResource;
-
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;

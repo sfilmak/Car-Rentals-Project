@@ -71,4 +71,6 @@ public class OrderBonus {
     private void addOrderBonus() {
         getConsultant().addOrderBonus(this);
     }
+
+
 }

@@ -22,18 +22,20 @@ public class DrivingLicense {
     @NotBlank
     private String countryOfIssue;
 
-    //Mentioned to be the most efficient one-to-one
-    //association in JPA: https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+    //https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+    //Not the best one, but it allows us
+    //to keep reference to Driving License from Customer class
+    //and keep reference to Customer from Driving License class
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @JoinColumn(name = "CUSTOMER_ID")
     private Customer customer;
 
     private static final int allowedAgeForDriving = 18;
 
     public DrivingLicense(){}
 
-    public DrivingLicense(@NotNull Long licenseID, @NotNull LocalDate dateOfIssue,
+    DrivingLicense(@NotNull Long licenseID, @NotNull LocalDate dateOfIssue,
                           @NotBlank String countryOfIssue, @NotNull Customer customer) {
         this.setLicenseID(licenseID);
         this.setDateOfIssue(dateOfIssue);

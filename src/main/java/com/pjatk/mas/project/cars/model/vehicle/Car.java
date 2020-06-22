@@ -2,6 +2,7 @@ package com.pjatk.mas.project.cars.model.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pjatk.mas.project.cars.model.CarRental;
+import com.pjatk.mas.project.cars.model.enums.EngineType;
 import com.pjatk.mas.project.cars.model.person.employees.Manager;
 
 import javax.persistence.*;
@@ -47,8 +48,6 @@ public class Car {
     @NotBlank
     private String imageURL;
 
-    private static Set<Engine> allParts = new HashSet<>();
-
     //Association with a CarRental
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     @NotNull
@@ -74,7 +73,7 @@ public class Car {
 
     public Car() { }
 
-    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
+     private Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
         this.setManufacturer(manufacturer);
         this.setModel(model);
         this.setColor(color);
@@ -84,8 +83,29 @@ public class Car {
         this.setImageURL(imageURL);
     }
 
-    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, Float maxSpeed, @NotBlank String imageURL) {
+    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL,
+               @NotBlank String engineName, @NotNull EngineType engineType) {
         this(manufacturer, model, color, carType, dateOfManufacture, pricePerDay, imageURL);
+        Engine newEngine = new Engine(this, engineName, engineType);
+        this.setEngine(newEngine);
+    }
+
+    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, Float maxSpeed, @NotBlank String imageURL,
+               @NotBlank String engineName, @NotNull EngineType engineType) {
+        this(manufacturer, model, color, carType, dateOfManufacture, pricePerDay, imageURL, engineName, engineType);
+        this.setMaxSpeed(maxSpeed);
+    }
+
+    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL,
+               @NotBlank String engineName, @NotNull EngineType engineType, Float litres, Integer cylinders) {
+        this(manufacturer, model, color, carType, dateOfManufacture, pricePerDay, imageURL);
+        Engine newEngine = new Engine(this, engineName, engineType, litres, cylinders);
+        this.setEngine(newEngine);
+    }
+
+    public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, Float maxSpeed, @NotBlank String imageURL,
+               @NotBlank String engineName, @NotNull EngineType engineType, Float litres, Integer cylinders) {
+        this(manufacturer, model, color, carType, dateOfManufacture, pricePerDay, imageURL, engineName, engineType, litres, cylinders);
         this.setMaxSpeed(maxSpeed);
     }
 
@@ -250,23 +270,11 @@ public class Car {
         this.managers = managers;
     }
 
-    public void addEngine(Engine engine) {
-        if (allParts.contains(engine)) {
-            throw new IllegalArgumentException("This part is added to some other car");
-        }
+    public void setEngine(Engine engine) {
         this.engine = engine;
-        allParts.add(engine);
     }
 
-    public void removeEngine(Engine engine) {
-        if (engine == null) {
-            throw new IllegalArgumentException("Engine cannot be null");
-        }
-        if (!allParts.contains(engine)) {
-            throw new IllegalArgumentException("Cannot find this part among all parts");
-        }
-        this.engine = null;
-        allParts.remove(engine);
-        Engine.destroyPart(engine);
+    public Engine getEngine() {
+        return engine;
     }
 }

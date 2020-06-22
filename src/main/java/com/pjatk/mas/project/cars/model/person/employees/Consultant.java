@@ -1,11 +1,8 @@
 package com.pjatk.mas.project.cars.model.person.employees;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.OrderBonus;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
-import org.hibernate.criterion.Order;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,13 +24,11 @@ public class Consultant extends Employee {
     @JsonIgnore
     private final Set<OrderBonus> orderBonuses = new HashSet<>();
 
-    public Consultant(){
-        super();
-    }
+    public Consultant(){ super(); }
 
     public Consultant(@NotBlank String name, @NotBlank String surname, @NotNull LocalDate birthdate, double salary, @NotBlank String workEmail,
-                      @NotNull EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate, LocalDate internshipEndDate,
-                      @NotBlank String workAddress){
+                      @NotNull EmployeeStatus employeeStatus, LocalDate hireDate, LocalDate internshipStartDate,
+                      LocalDate internshipEndDate, @NotBlank String workAddress){
         super(name, surname, birthdate, salary, workEmail, employeeStatus, hireDate, internshipStartDate, internshipEndDate);
         this.setWorkAddress(workAddress);
     }
@@ -65,5 +60,4 @@ public class Consultant extends Employee {
         }
         this.orderBonuses.remove(orderBonus);
     }
-
 }
