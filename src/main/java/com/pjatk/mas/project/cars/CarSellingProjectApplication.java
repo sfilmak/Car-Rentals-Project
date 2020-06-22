@@ -14,7 +14,7 @@ import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
 import com.pjatk.mas.project.cars.model.vehicle.Specialization;
 import com.pjatk.mas.project.cars.model.vehicle.TechnicalInspection;
-import com.pjatk.mas.project.cars.repos.crud.*;
+import com.pjatk.mas.project.cars.repos.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
