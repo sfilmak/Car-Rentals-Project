@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import GridListTileBar from "@material-ui/core/GridListTileBar";
@@ -13,8 +13,8 @@ import Avatar from '@material-ui/core/Avatar';
 
 import EventIcon from '@material-ui/icons/Event';
 import DriveEtaIcon from '@material-ui/icons/DriveEta';
-import SpeedIcon from '@material-ui/icons/Speed';
 import ColorLensIcon from '@material-ui/icons/ColorLens';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import CustomizedDialogs, {DialogTitle} from "./Dialog";
 import TextField from '@material-ui/core/TextField';
@@ -171,6 +171,16 @@ const CarInfo = ({cars, customers}) => {
     const [mechanicID, setMechanicID] = useState('');
     const [services, setServices] = useState([]);
 
+    const [engine, setEngine] = useState('')
+
+    useEffect(()=>{
+        fetch('api/cars/' + carID + '/engine')
+            .then(res => res.json())
+            .then((data) => {
+                setEngine(data)
+            })
+    }, [])
+
     const handleCustomerSelection = (event) => {
         setCustomerID(event.target.value);
     };
@@ -185,10 +195,6 @@ const CarInfo = ({cars, customers}) => {
 
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        //loadListOfServices();
-    };
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -197,6 +203,19 @@ const CarInfo = ({cars, customers}) => {
         return car.carID === carID
     });
 
+    const handleClickOpen = () => {
+        loadListOfServices();
+    };
+
+    function loadListOfServices(){
+        fetch('api/cars/' + carID + '/technicalInspectionsSet')
+            .then(res => res.json())
+            .then((data) => {
+                setServices(data._embedded.technicalInspections);
+                setOpen(true);
+            })
+            .catch(console.log);
+    }
 
     return (
         <div>
@@ -231,10 +250,10 @@ const CarInfo = ({cars, customers}) => {
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar className={classes.list_avatar}>
-                                            <DriveEtaIcon/>
+                                            <FavoriteIcon/>
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary="Engine" secondary="Placeholder TODO"/>
+                                    <ListItemText primary="Engine" secondary={<span>{engine.name} | {engine.type}</span>}/>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemAvatar>
@@ -247,10 +266,10 @@ const CarInfo = ({cars, customers}) => {
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar className={classes.list_avatar}>
-                                            <SpeedIcon/>
+                                            <DriveEtaIcon/>
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary="Max speed" secondary={car.maxSpeed}/>
+                                    <ListItemText primary="Car type" secondary={car.carType}/>
                                 </ListItem>
                             </List>
                         </GridCellLeft>

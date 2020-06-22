@@ -34,8 +34,6 @@ public class TechnicalInspection {
     @NotNull(message = "Technical inspection should have a mechanic!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "employee_id", nullable = false)
-    @JsonManagedReference
-    @RestResource(exported=false)
     private Mechanic mechanic;
 
     @NotNull(message = "Technical inspection should have a car!")

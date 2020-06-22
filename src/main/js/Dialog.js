@@ -32,6 +32,10 @@ const useStyles = makeStyles(() => ({
     list_avatar: {
         backgroundColor: '#FF775A',
     },
+    dialogContent: {
+        margin: '10px !important',
+        padding: '0px !important'
+    },
 }));
 
 export const DialogTitle = withStyles(styles)((props) => {
@@ -61,7 +65,7 @@ const CustomizedDialogs = ({listOfServices}) => {
                                     <HistoryIcon/>
                                 </Avatar>
                             </ListItemAvatar>
-                            <ListItemText primary={service.type} secondary={<p>{service.date} | {service.carMileage}</p>}/>
+                            <ListItemText primary={service.type} secondary={<span>Date: {service.date} | Car mileage: {service.carMileage}</span>}/>
                         </ListItem>
                     ))}
                 </List>
