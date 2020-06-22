@@ -68,6 +68,10 @@ public class Car {
     @JsonIgnore
     private Set<Manager> managers = new HashSet<>();
 
+    @OneToOne(mappedBy = "car", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+    private Engine engine;
+
     public Car() { }
 
     public Car(@NotBlank String manufacturer, @NotBlank String model, @NotBlank String color, @NotBlank String carType, @NotNull LocalDate dateOfManufacture, float pricePerDay, @NotBlank String imageURL) {
@@ -250,6 +254,7 @@ public class Car {
         if (allParts.contains(engine)) {
             throw new IllegalArgumentException("This part is added to some other car");
         }
+        this.engine = engine;
         allParts.add(engine);
     }
 
@@ -260,6 +265,7 @@ public class Car {
         if (!allParts.contains(engine)) {
             throw new IllegalArgumentException("Cannot find this part among all parts");
         }
+        this.engine = null;
         allParts.remove(engine);
         Engine.destroyPart(engine);
     }

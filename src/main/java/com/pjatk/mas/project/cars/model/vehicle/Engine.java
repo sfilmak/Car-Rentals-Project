@@ -7,7 +7,8 @@ import javax.validation.constraints.NotNull;
 
 //Part of the car
 //Composition
-@Entity
+@Entity(name = "Engine")
+@Table(name = "engine")
 public class Engine {
 
     @Id
@@ -25,9 +26,8 @@ public class Engine {
 
     private Integer cylinders;
 
-    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @JoinColumn(name = "car_id")
     private Car car;
 
     public Engine(){}

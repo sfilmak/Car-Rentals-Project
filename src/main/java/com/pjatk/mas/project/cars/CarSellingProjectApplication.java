@@ -3,11 +3,13 @@ package com.pjatk.mas.project.cars;
 import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.education.University;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
+import com.pjatk.mas.project.cars.model.enums.EngineType;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.DrivingLicense;
 import com.pjatk.mas.project.cars.model.person.employees.HR;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
+import com.pjatk.mas.project.cars.model.vehicle.Engine;
 import com.pjatk.mas.project.cars.repos.crud.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -87,9 +89,8 @@ public class CarSellingProjectApplication {
 			//techRepo.save(technicalInspection);
 			carRepo.saveAll(Arrays.asList(car3, car4, car5, car6, car7, car8, car9, car10));
 			//customerRepo.save(customer);
-			//Engine engine = Engine.createEngine(car2, "Name", EngineType.ELECTRIC);
-			//engineRepo.save(engine);
-
+			Engine engine = Engine.createEngine(car2, "Name", EngineType.ELECTRIC);
+			engineRepo.save(engine);
 		};
 	}
 
