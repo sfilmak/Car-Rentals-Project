@@ -1,5 +1,6 @@
 package com.pjatk.mas.project.cars.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
@@ -41,6 +42,7 @@ public class CarRental {
     @JoinColumn(name = "car_id", nullable = false)
     @JsonManagedReference
     @RestResource(exported=false)
+    @JsonBackReference
     private Car car;
 
     @NotNull(message = "CarRental should have a customer!")
@@ -48,6 +50,7 @@ public class CarRental {
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonManagedReference
     @RestResource(exported=false)
+    @JsonBackReference
     private Customer customer;
 
     @NotNull(message = "CarRental should have an order bonus!")
@@ -56,6 +59,7 @@ public class CarRental {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonManagedReference
     @RestResource(exported=false)
+    @JsonBackReference
     private OrderBonus orderBonus;
 
     public CarRental(){}

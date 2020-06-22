@@ -1,24 +1,14 @@
 package com.pjatk.mas.project.cars.repos.rest;
 
 import com.pjatk.mas.project.cars.model.vehicle.Car;
-import com.pjatk.mas.project.cars.repos.crud.CarRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.*;
 
-@RestController
-public class CarResource {
-
-    @Autowired
-    private CarRepository carRepository;
-
-    @GetMapping("/cars_example")
-    public List<Car> retrieveAllStudents() {
-        Iterable<Car> source = carRepository.findAll();
-        List<Car> target = new ArrayList<>();
-        source.forEach(target::add);
-        return target;
-    }
-
+@RepositoryRestResource(collectionResourceRel = "carsList", path = "carsList")
+public interface CarResource extends PagingAndSortingRepository<Car, Long> {
+    @Query("SELECT carTable from Car carTable LEFT JOIN FETCH carTable.carRentals WHERE carTable.carID = ?1")
+    Optional<Car> findById(@Param("carID") Long carID);
 }
