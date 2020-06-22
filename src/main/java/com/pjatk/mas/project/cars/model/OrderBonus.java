@@ -16,8 +16,8 @@ public class OrderBonus {
     private double bonusForOrder;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "car_rentalid")
     private CarRental carRental;
 
     @NotNull(message = "OrderBonus should have a consultant!")
@@ -70,7 +70,6 @@ public class OrderBonus {
 
     private void addOrderBonus() {
         getConsultant().addOrderBonus(this);
+        getCarRental().setOrderBonus(this);
     }
-
-
 }

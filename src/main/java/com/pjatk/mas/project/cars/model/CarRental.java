@@ -11,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "CarRental")
+@Table(name = "carRental")
 public class CarRental {
 
     @Id
@@ -48,6 +49,14 @@ public class CarRental {
     @JsonManagedReference
     @RestResource(exported=false)
     private Customer customer;
+
+    @NotNull
+    @OneToOne(mappedBy = "carRental",
+            fetch = FetchType.LAZY, optional = false,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JsonManagedReference
+    @RestResource(exported=false)
+    private OrderBonus orderBonus;
 
     public CarRental(){}
 
@@ -136,5 +145,22 @@ public class CarRental {
                 customer.addCustomer(this);
             }
         }
+    }
+
+    public void updateRentalDates(@FutureOrPresent LocalDate startDate, @FutureOrPresent LocalDate endDate){
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public void changeRentaStatus(@NotNull RentalStatus rentalStatus){
+        this.rentalStatus = rentalStatus;
+    }
+
+    public OrderBonus getOrderBonus() {
+        return orderBonus;
+    }
+
+    public void setOrderBonus(OrderBonus orderBonus) {
+        this.orderBonus = orderBonus;
     }
 }

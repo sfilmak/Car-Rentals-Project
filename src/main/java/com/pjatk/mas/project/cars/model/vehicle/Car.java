@@ -145,10 +145,6 @@ public class Car {
         return pricePerDay;
     }
 
-    public void setPricePerDay(float pricePerDay) {
-        this.pricePerDay = pricePerDay;
-    }
-
     public String getColor() {
         return color;
     }
@@ -179,14 +175,6 @@ public class Car {
 
     public void setMaxSpeed(Float maxSpeed) {
         this.maxSpeed = maxSpeed;
-    }
-
-    public static void setPricePerDay(Long carID, float price) {
-        //TODO
-    }
-
-    public static void setPricePerDay(Long carID, float price, float tax) {
-        //TODO
     }
 
     public void addCarRental(CarRental carRental) {
@@ -276,5 +264,14 @@ public class Car {
 
     public Engine getEngine() {
         return engine;
+    }
+
+    //TODO
+    public void setPricePerDay(float pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+    public void setPricePerDay(float pricePerDay, float tax) {
+        this.pricePerDay = pricePerDay + tax;
     }
 }
