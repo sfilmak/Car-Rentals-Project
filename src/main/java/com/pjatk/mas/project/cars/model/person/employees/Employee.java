@@ -28,7 +28,6 @@ public class Employee extends Person<Long> implements Serializable {
     private LocalDate hireDate;
 
     @Column(columnDefinition = "DATE")
-    @PastOrPresent
     private LocalDate internshipStartDate;
 
     @Column(columnDefinition = "DATE")
@@ -74,7 +73,6 @@ public class Employee extends Person<Long> implements Serializable {
     public void setHireDate(LocalDate hireDate) {
         if(this.getEmployeeStatus() == EmployeeStatus.FULLTIME) {
             if(hireDate == null) {
-                //TODO replace
                 throw new IllegalArgumentException("Hire date cannot be null if employee status is FULLTIME WORKER");
             }
         } else if(this.getEmployeeStatus() == EmployeeStatus.INTERN) {
@@ -141,5 +139,21 @@ public class Employee extends Person<Long> implements Serializable {
 
     public EmployeeStatus getEmployeeStatus() {
         return employeeStatus;
+    }
+
+    public void setEmployeeStatus(EmployeeStatus employeeStatus) {
+        this.employeeStatus = employeeStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "salary=" + salary +
+                ", workEmail='" + workEmail + '\'' +
+                ", hireDate=" + hireDate +
+                ", internshipStartDate=" + internshipStartDate +
+                ", internshipEndDate=" + internshipEndDate +
+                ", employeeStatus=" + employeeStatus +
+                '}';
     }
 }

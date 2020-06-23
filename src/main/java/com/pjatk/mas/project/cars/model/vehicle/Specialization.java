@@ -57,21 +57,35 @@ public class Specialization {
         return inspectionType;
     }
 
-    public void setInspectionType(InspectionType inspectionType) {
+    public void setInspectionType(@NotNull InspectionType inspectionType) {
         this.inspectionType = inspectionType;
     }
 
-    public void addMechanic(Mechanic mechanic) {
+    public void addMechanic(@NotNull Mechanic mechanic) {
         if(!mechanics.contains(mechanic)) {
             mechanics.add(mechanic);
             mechanic.setSpecialization(this);
         }
     }
 
-    public void changeSpecialization(Mechanic mechanic, Specialization newSpecialization) {
+    public void changeSpecialization(@NotNull Mechanic mechanic, @NotNull Specialization newSpecialization) {
         if(mechanics.contains(mechanic)) {
             mechanics.remove(mechanic);
             mechanic.setSpecialization(newSpecialization);
         }
+    }
+
+    public Set<Mechanic> getMechanics() {
+        return new HashSet<>(mechanics);
+    }
+
+    @Override
+    public String toString() {
+        return "Specialization{" +
+                "specializationID=" + specializationID +
+                ", experience='" + experience + '\'' +
+                ", inspectionType=" + inspectionType +
+                ", mechanics=" + mechanics +
+                '}';
     }
 }

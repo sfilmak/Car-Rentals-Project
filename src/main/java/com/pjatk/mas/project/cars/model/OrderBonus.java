@@ -67,4 +67,14 @@ public class OrderBonus {
         getConsultant().addOrderBonus(this);
         getCarRental().addOrderBonus(this);
     }
+
+    @Override
+    public String toString() {
+        return "OrderBonus{" +
+                "orderBonusID=" + orderBonusID +
+                ", bonusForOrder=" + bonusForOrder +
+                ", carRental=" + carRental +
+                ", consultant=" + consultant +
+                '}';
+    }
 }

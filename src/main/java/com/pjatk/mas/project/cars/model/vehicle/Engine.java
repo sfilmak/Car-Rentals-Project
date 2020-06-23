@@ -91,4 +91,16 @@ public class Engine {
     public void setCar(Car car){
         this.car = car;
     }
+
+    @Override
+    public String toString() {
+        return "Engine{" +
+                "engineID=" + engineID +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", litres=" + litres +
+                ", cylinders=" + cylinders +
+                ", car=" + car +
+                '}';
+    }
 }

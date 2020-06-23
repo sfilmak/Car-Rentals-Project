@@ -83,4 +83,14 @@ public class DrivingLicense {
     public static boolean isAllowedInPoland(DrivingLicense drivingLicense){
         return Period.between(drivingLicense.getCustomer().getBirthdate(), LocalDate.now()).getYears() >= allowedAgeForDriving;
     }
+
+    @Override
+    public String toString() {
+        return "DrivingLicense{" +
+                "licenseID=" + licenseID +
+                ", dateOfIssue=" + dateOfIssue +
+                ", countryOfIssue='" + countryOfIssue + '\'' +
+                ", customer=" + customer +
+                '}';
+    }
 }

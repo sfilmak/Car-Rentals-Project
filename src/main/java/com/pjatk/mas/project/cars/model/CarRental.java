@@ -109,7 +109,7 @@ public class CarRental {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(@NotNull Car car) {
         if(this.car != car) {
             if(this.car != null) {
                 Car tmp = this.car;
@@ -127,7 +127,7 @@ public class CarRental {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(@NotNull Customer customer) {
         if(this.customer != customer) {
             if(this.customer != null) {
                 Customer tmp = this.customer;
@@ -150,7 +150,7 @@ public class CarRental {
         this.rentalStatus = rentalStatus;
     }
 
-    public void addOrderBonus(OrderBonus orderBonus) {
+    public void addOrderBonus(@NotNull OrderBonus orderBonus) {
         if(orderBonus == null) {
             throw new IllegalArgumentException("Order bonus attribute cannot be null");
         }
@@ -159,7 +159,7 @@ public class CarRental {
         }
     }
 
-    public void removeOrderBonus(OrderBonus orderBonus) {
+    public void removeOrderBonus(@NotNull OrderBonus orderBonus) {
         if(orderBonus == null) {
             throw new IllegalArgumentException("Order bonus cannot be null or empty");
         }
@@ -175,7 +175,21 @@ public class CarRental {
         return new HashSet<>(orderBonuses);
     }
 
-    public void setRentalStatus(RentalStatus rentalStatus) {
+    public void setRentalStatus(@NotNull RentalStatus rentalStatus) {
         this.rentalStatus = rentalStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "CarRental{" +
+                "carRentalID=" + carRentalID +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", comments='" + comments + '\'' +
+                ", rentalStatus=" + rentalStatus +
+                ", car=" + car +
+                ", customer=" + customer +
+                ", orderBonuses=" + orderBonuses +
+                '}';
     }
 }

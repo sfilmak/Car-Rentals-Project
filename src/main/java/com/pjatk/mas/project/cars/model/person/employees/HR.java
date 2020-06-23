@@ -26,6 +26,7 @@ public class HR extends Employee {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "university_id")
     )
+    @NotNull
     private final Set<University> universities = new HashSet<>();
 
     //Association with college
@@ -39,6 +40,7 @@ public class HR extends Employee {
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "college_id")
     )
+    @NotNull
     private final Set<College> colleges = new HashSet<>();
 
     public HR(){ super();}
@@ -63,7 +65,7 @@ public class HR extends Employee {
                 college.addToTeaches(this);
             }
         } else {
-            System.err.println("This student already attends university");
+            throw new IllegalArgumentException("This student already attends university");
         }
     }
 
@@ -90,5 +92,13 @@ public class HR extends Employee {
             universities.remove(university);
             university.removeFromTeaches(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HR{" +
+                "universities=" + universities +
+                ", colleges=" + colleges +
+                '}';
     }
 }

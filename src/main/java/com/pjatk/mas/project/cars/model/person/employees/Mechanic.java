@@ -43,7 +43,7 @@ public class Mechanic extends Employee {
         return specialization;
     }
 
-    public void setSpecialization(Specialization specialization) {
+    public void setSpecialization(@NotNull Specialization specialization) {
         if(this.specialization != specialization) {
             if(this.specialization != null) {
                 Specialization tmp = this.specialization;
@@ -57,17 +57,29 @@ public class Mechanic extends Employee {
         }
     }
 
-    public void addTechnicalInspection(TechnicalInspection technicalInspection) {
+    public void addTechnicalInspection(@NotNull TechnicalInspection technicalInspection) {
         if(!technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.add(technicalInspection);
             technicalInspection.setMechanic(this);
         }
     }
 
-    public void changeTechnicalInspection(TechnicalInspection technicalInspection, Mechanic newMechanic) {
+    public void changeTechnicalInspection(@NotNull TechnicalInspection technicalInspection, @NotNull Mechanic newMechanic) {
         if(technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.remove(technicalInspection);
             technicalInspection.setMechanic(newMechanic);
         }
+    }
+
+    public Set<TechnicalInspection> getTechnicalInspectionsSet() {
+        return technicalInspectionsSet;
+    }
+
+    @Override
+    public String toString() {
+        return "Mechanic{" +
+                "specialization=" + specialization +
+                ", technicalInspectionsSet=" + technicalInspectionsSet +
+                '}';
     }
 }

@@ -1,10 +1,7 @@
 package com.pjatk.mas.project.cars.model.vehicle;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.enums.InspectionType;
 import com.pjatk.mas.project.cars.model.person.employees.Mechanic;
-import org.springframework.data.rest.core.annotation.RestResource;
-
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -98,7 +95,7 @@ public class TechnicalInspection {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(@NotNull Car car) {
         if(this.car != car) {
             if(this.car != null) {
                 Car tmp = this.car;
@@ -116,7 +113,7 @@ public class TechnicalInspection {
         return mechanic;
     }
 
-    public void setMechanic(Mechanic mechanic) {
+    public void setMechanic(@NotNull Mechanic mechanic) {
         if(this.mechanic != mechanic) {
             if(this.mechanic != null) {
                 Mechanic tmp = this.mechanic;
@@ -128,5 +125,18 @@ public class TechnicalInspection {
                 mechanic.addTechnicalInspection(this);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TechnicalInspection{" +
+                "technicalInspectionID=" + technicalInspectionID +
+                ", date=" + date +
+                ", arePartsReplaced=" + arePartsReplaced +
+                ", carMileage=" + carMileage +
+                ", type=" + type +
+                ", mechanic=" + mechanic +
+                ", car=" + car +
+                '}';
     }
 }

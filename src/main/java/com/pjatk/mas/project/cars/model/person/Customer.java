@@ -75,14 +75,14 @@ public class Customer extends Person<Long> {
         this.address = address;
     }
 
-    public void addCustomer(CarRental carRental) {
+    public void addCustomer(@NotNull CarRental carRental) {
         if(!carRentals.contains(carRental)) {
             carRentals.add(carRental);
             carRental.setCustomer(this);
         }
     }
 
-    public void changeCustomer(CarRental carRental, Customer newCustomer) {
+    public void changeCustomer(@NotNull CarRental carRental, @NotNull Customer newCustomer) {
         if(carRentals.contains(carRental)) {
             carRentals.remove(carRental);
             carRental.setCustomer(newCustomer);
@@ -95,5 +95,20 @@ public class Customer extends Person<Long> {
 
     public void setDrivingLicense(DrivingLicense drivingLicense) {
         this.drivingLicense = drivingLicense;
+    }
+
+    public Set<CarRental> getCarRentals() {
+        return carRentals;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", carRentals=" + carRentals +
+                ", drivingLicense=" + drivingLicense +
+                '}';
     }
 }

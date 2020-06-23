@@ -65,11 +65,13 @@ public class Car {
     //Association with managers
     @ManyToMany(mappedBy = "cars", fetch = FetchType.LAZY)
     @JsonIgnore
+    @NotNull
     private Set<Manager> managers = new HashSet<>();
 
     @OneToOne(mappedBy = "car",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY, optional = false)
+    @NotNull
     private Engine engine;
 
     public Car() { }
@@ -178,28 +180,28 @@ public class Car {
         this.maxSpeed = maxSpeed;
     }
 
-    public void addCarRental(CarRental carRental) {
+    public void addCarRental(@NotNull CarRental carRental) {
         if (!carRentals.contains(carRental)) {
             carRentals.add(carRental);
             carRental.setCar(this);
         }
     }
 
-    public void changeCarRental(CarRental carRental, Car newCar) {
+    public void changeCarRental(@NotNull CarRental carRental, @NotNull Car newCar) {
         if (carRentals.contains(carRental)) {
             carRentals.remove(carRental);
             carRental.setCar(newCar);
         }
     }
 
-    public void addTechnicalInspection(TechnicalInspection technicalInspection) {
+    public void addTechnicalInspection(@NotNull TechnicalInspection technicalInspection) {
         if (!technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.add(technicalInspection);
             technicalInspection.setCar(this);
         }
     }
 
-    public void changeTechnicalInspection(TechnicalInspection technicalInspection, Car newCar) {
+    public void changeTechnicalInspection(@NotNull TechnicalInspection technicalInspection, @NotNull Car newCar) {
         if (technicalInspectionsSet.contains(technicalInspection)) {
             technicalInspectionsSet.remove(technicalInspection);
             technicalInspection.setCar(newCar);
@@ -221,14 +223,14 @@ public class Car {
         return Objects.hash(carID, manufacturer, model);
     }
 
-    public void addManager(Manager manager) {
+    public void addManager(@NotNull Manager manager) {
         if(!managers.contains(manager)){
             managers.add(manager);
             manager.getCars().add(this);
         }
     }
 
-    public void removeManager(Manager manager) {
+    public void removeManager(@NotNull Manager manager) {
         if(managers.contains(manager)){
             managers.remove(manager);
             manager.getCars().remove(this);
@@ -250,11 +252,11 @@ public class Car {
         return managers;
     }
 
-    public void setManagers(Set<Manager> managers) {
+    public void setManagers(@NotNull Set<Manager> managers) {
         this.managers = managers;
     }
 
-    public void setEngine(Engine engine) {
+    public void setEngine(@NotNull Engine engine) {
         this.engine = engine;
     }
 
@@ -266,11 +268,11 @@ public class Car {
         this.pricePerDay = pricePerDay;
     }
 
-    public static void setPricePerDay(Car car, float pricePerDay) {
+    public static void setPricePerDay(@NotNull Car car, float pricePerDay) {
         car.setPricePerDay(pricePerDay);
     }
 
-    public static void setPricePerDay(Car car, float pricePerDay, float tax) {
+    public static void setPricePerDay(@NotNull Car car, float pricePerDay, float tax) {
         car.setPricePerDay(pricePerDay + tax);
     }
 

@@ -66,4 +66,12 @@ public class Consultant extends Employee {
             tempRental.removeOrderBonus(orderBonus);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Consultant{" +
+                "workAddress='" + workAddress + '\'' +
+                ", orderBonuses=" + orderBonuses +
+                '}';
+    }
 }

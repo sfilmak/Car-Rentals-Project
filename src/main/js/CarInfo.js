@@ -207,6 +207,8 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [rentalStatusHeader, setRentalStatusHeader] = React.useState('Customer can not drive!');
     const [rentalStatusComment, setRentalStatusComment] = React.useState('Sorry, but this customer can not drive - he/she is too young. Please, select a different customer.');
 
+    const [inspectionType, setInspectionType] = React.useState('ENGINE');
+
     const handleStartDateChange = () => {
         const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
         const checkedDate = !checkIsDateBetweenDates(receivedDate);
@@ -283,8 +285,11 @@ const CarInfo = ({cars, customers, specializations}) => {
 
     const handleTechnicalInspectionSelection = (event) => {
         setTiID(event.target.value);
+
+
         setButtonDisabled(true);
         setIsMechanicSelected(false);
+        //setInspectionType(data._embedded.)
         fetch('api/specializations/' + event.target.value + '/mechanics')
             .then(res => res.json())
             .then((data) => {
@@ -292,7 +297,6 @@ const CarInfo = ({cars, customers, specializations}) => {
                 setIsReviewTypeSelected(true);
                 setMechanicID('');
             })
-
     };
 
     const handleMechanicSelection = (event) => {
@@ -391,7 +395,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                         date: dayjs(),
                         arePartsReplaced: true,
                         carMileage: 5000,
-                        type: 'ENGINE',
+                        type: inspectionType,
                         mechanic: 'http://localhost:8080/api/mechanics/' + mechanicID,
                         car: 'http://localhost:8080/api/cars/' + carID
                     })

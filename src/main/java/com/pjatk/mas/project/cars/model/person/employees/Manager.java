@@ -19,6 +19,7 @@ public class Manager extends Employee {
     @JoinTable(name = "car_manager",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
+    @NotNull
     private Set<Car> cars = new HashSet<>();
 
     public Manager(){
@@ -50,5 +51,12 @@ public class Manager extends Employee {
 
     public void setCars(Set<Car> cars) {
         this.cars = cars;
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "cars=" + cars +
+                '}';
     }
 }

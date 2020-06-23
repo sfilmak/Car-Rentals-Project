@@ -3,6 +3,7 @@ package com.pjatk.mas.project.cars.model.education;
 import com.pjatk.mas.project.cars.model.person.employees.HR;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ public class University {
 
     //Association with HRs
     @ManyToMany(mappedBy = "universities")
+    @NotNull
     private Set<HR> HRs = new HashSet<>();
 
     public University(){}
@@ -75,7 +77,7 @@ public class University {
         this.HRs = HRs;
     }
 
-    public void addToTeaches(HR hr) {
+    public void addToTeaches(@NotNull HR hr) {
         if(hr == null) {
             throw new IllegalArgumentException("hr cannot be null");
         }
@@ -85,7 +87,7 @@ public class University {
         }
     }
 
-    public void removeFromTeaches(HR hr) {
+    public void removeFromTeaches(@NotNull HR hr) {
         if(hr == null) {
             throw new IllegalArgumentException("hr cannot be null");
         }
@@ -93,5 +95,15 @@ public class University {
             HRs.remove(hr);
             hr.removeUniversity(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "University{" +
+                "universityID=" + universityID +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
