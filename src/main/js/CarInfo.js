@@ -81,7 +81,6 @@ const CarInfo = ({cars, customers, specializations}) => {
         }
         const checkedDate = !checkIsDateBetweenDates(receivedDate);
         const notInPast = receivedDate.isAfter(dayjs())
-        setISStartDateCorrect(checkedDate && notInPast);
         if(checkedDate && notInPast){
             let beforeEndDate = true;
             if(isEndDateWasChanged){
@@ -93,6 +92,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                 if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isEndDateCorrect) {
                     setButtonDisabled(false);
                 }
+                setISStartDateCorrect(true);
             } else {
                 setRentalStartMessage('Error: start date after end date');
                 setRentalStartCorrectness(true);
@@ -103,6 +103,7 @@ const CarInfo = ({cars, customers, specializations}) => {
             setRentalStartMessage('Error: select different date');
             setRentalStartCorrectness(true);
             setButtonDisabled(true);
+            setISStartDateCorrect(false);
         }
         setStartDate(receivedDate.add(1, 'day'));
     };
@@ -278,7 +279,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                         consultant: 'http://localhost:8080/api/consultants/21'
                     })
                 })
-                .then(response => {
+                .then(() => {
                     setRentalAdded(true);
                     return axios.post('api/technicalInspections', {
                         date: dayjs(),
@@ -289,7 +290,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                         car: 'http://localhost:8080/api/cars/' + carID
                     })
                 })
-                .then(response => {
+                .then(() => {
                     handleFinalDialogClickOpen();
                 })
                 .catch(function (error) {

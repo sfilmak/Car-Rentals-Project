@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Optional;
 
 @SpringBootApplication
 public class CarSellingProjectApplication {
@@ -42,6 +41,7 @@ public class CarSellingProjectApplication {
 									OrderBonusRepo orderBonusRepo,
 									MechanicRepository mechanicRepo) {
 		return (args) -> {
+			//REMOVE AFTER FIRST LAUNCH
 			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg",
 					"Toyota Engine", EngineType.HYBRID);
@@ -102,8 +102,8 @@ public class CarSellingProjectApplication {
 					"ksks@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2020, Month.JANUARY, 16),
 					null, null, "Warsaw");
 
-			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.AUGUST, 22), LocalDate.of(2020, Month.AUGUST, 24), "Comments", RentalStatus.PLANNED, car1, customer1);
-			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), "Another message example", RentalStatus.PLANNED, car2, customer2);
+			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.AUGUST, 22), LocalDate.of(2020, Month.AUGUST, 24),  RentalStatus.PLANNED, car1, customer1);
+			CarRental carRental2 = new CarRental(LocalDate.of(2020, Month.JULY, 22), LocalDate.of(2020, Month.JULY, 24), RentalStatus.PLANNED, car2, customer2);
 
 			OrderBonus orderBonus = new OrderBonus(500, carRental1, consultant1);
 			OrderBonus orderBonus2 = new OrderBonus(400, carRental2, consultant1);

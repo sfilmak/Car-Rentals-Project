@@ -5,10 +5,8 @@ import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
 import com.pjatk.mas.project.cars.model.person.employees.Consultant;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
-
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -32,7 +30,6 @@ public class CarRental {
     @FutureOrPresent
     private LocalDate endDate;
 
-    @NotBlank
     private String comments;
 
     @NotNull
@@ -59,14 +56,19 @@ public class CarRental {
     public CarRental(){}
 
     public CarRental(@NotNull LocalDate startDate, @NotNull LocalDate endDate,
-                     @NotBlank String comments, @NotNull RentalStatus rentalStatus,
+                     @NotNull RentalStatus rentalStatus,
                      @NotNull Car car, @NotNull Customer customer) {
         this.setStartDate(startDate);
         this.setEndDate(endDate);
-        this.setComments(comments);
         this.changeRentalStatus(rentalStatus);
         this.setCar(car);
         this.setCustomer(customer);
+    }
+
+    public CarRental(@NotNull LocalDate startDate, @NotNull LocalDate endDate, @NotNull RentalStatus rentalStatus,
+                     @NotNull Car car, @NotNull Customer customer, String comments) {
+        this(startDate, endDate, rentalStatus, car, customer);
+        this.setComments(comments);
     }
 
     public Long getCarRentalID() {
