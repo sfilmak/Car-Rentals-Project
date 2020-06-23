@@ -193,6 +193,8 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [isReviewTypeSelected, setIsReviewTypeSelected] = useState(false);
     const [isMechanicSelected, setIsMechanicSelected] = useState(false);
 
+    const [isButtonDisabled, setButtonDisabled] = useState(true)
+
     const [rentalStartMessage, setRentalStartMessage] = React.useState('Select start date');
     const [rentalStartCorrectness, setRentalStartCorrectness] = React.useState(false);
     const [rentalEndMessage, setRentalEndMessage] = React.useState('Select end date');
@@ -213,11 +215,16 @@ const CarInfo = ({cars, customers, specializations}) => {
         if(checkedDate && notInPast){
             setRentalStartMessage('Car rental start date');
             setRentalStartCorrectness(false);
+            if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isEndDateCorrect) {
+                setButtonDisabled(false);
+            }
         } else {
             setRentalStartMessage('Error: select different date');
             setRentalStartCorrectness(true);
+            setButtonDisabled(true);
         }
-        setStartDate(receivedDate.add(1, 'day'))
+        setStartDate(receivedDate.add(1, 'day'));
+
     };
 
     const handleEndDateChange = () => {
@@ -225,16 +232,21 @@ const CarInfo = ({cars, customers, specializations}) => {
         console.log("HandleEndDateChange: " + document.getElementById("rentalEndDate").value);
         const notBetweenCurrDates = !checkIsDateBetweenDates(receivedEndDate);
         const afterStartDate = receivedEndDate.isAfter(startDate.subtract(1, 'day'))
-        //const oldDatesNotBetweenNew = !checkIsDateBetweenDates(receivedEndDate);
+        //const oldDatesNotBetweenNew = !checkIsOldDateBetweenDates(receivedEndDate);
         setIsEndDateCorrect(notBetweenCurrDates && afterStartDate);
         if(notBetweenCurrDates && afterStartDate){
             setRentalEndMessage('Car rental end date');
             setRentalEndCorrectness(false);
+            if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isStartDateCorrect) {
+                setButtonDisabled(false);
+            }
         } else {
             setRentalEndMessage('Error: select different end date');
             setRentalEndCorrectness(true);
+            setButtonDisabled(true);
         }
         setEndDate(receivedEndDate.add(1, 'day'));
+
     };
 
     function checkIsDateBetweenDates(givenDate) {
@@ -271,6 +283,8 @@ const CarInfo = ({cars, customers, specializations}) => {
 
     const handleTechnicalInspectionSelection = (event) => {
         setTiID(event.target.value);
+        setButtonDisabled(true);
+        setIsMechanicSelected(false);
         fetch('api/specializations/' + event.target.value + '/mechanics')
             .then(res => res.json())
             .then((data) => {
@@ -278,11 +292,15 @@ const CarInfo = ({cars, customers, specializations}) => {
                 setIsReviewTypeSelected(true);
                 setMechanicID('');
             })
+
     };
 
     const handleMechanicSelection = (event) => {
         setMechanicID(event.target.value);
         setIsMechanicSelected(true);
+        if(isCustomerSelected && isReviewTypeSelected && isStartDateCorrect && isEndDateCorrect) {
+            setButtonDisabled(false);
+        }
     };
 
     const [open, setOpen] = React.useState(false);
@@ -541,10 +559,9 @@ const CarInfo = ({cars, customers, specializations}) => {
                                                    shrink: true,
                                                }}
                                     />
-                                    <Button disabled={!isMechanicSelected && !isReviewTypeSelected && !isEndDateCorrect && !isStartDateCorrect && !isCustomerSelected} variant="contained" size="large"
+                                    <Button disabled={isButtonDisabled} variant="contained" size="large"
                                             className={classes.bookButton}
                                             onClick={buttonClick}>
-                                        {!isMechanicSelected && !isReviewTypeSelected && !isEndDateCorrect && !isStartDateCorrect && !isCustomerSelected}
                                         Book a car
                                     </Button>
                                 </div>
@@ -555,7 +572,8 @@ const CarInfo = ({cars, customers, specializations}) => {
             ))) : (
                 <b className={classes.notFoundLabel}>No car found with this ID</b>
             )}
-            <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+            <Dialog
+                fullScreen={fullScreen} onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                     Service history
                 </DialogTitle>

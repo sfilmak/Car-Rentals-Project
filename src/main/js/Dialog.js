@@ -34,7 +34,8 @@ const useStyles = makeStyles(() => ({
     },
     dialogContent: {
         margin: '10px !important',
-        padding: '0px !important'
+        padding: '0px !important',
+        minWidth: '300px !important'
     },
 }));
 

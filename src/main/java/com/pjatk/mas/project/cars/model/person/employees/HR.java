@@ -81,7 +81,6 @@ public class HR extends Employee {
                 university.addToTeaches(this);
             }
         } else {
-            //TODO: replace
             throw new IllegalArgumentException("This student already attends college");
         }
     }
