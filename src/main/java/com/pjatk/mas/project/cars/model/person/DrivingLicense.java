@@ -76,7 +76,7 @@ public class DrivingLicense {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    private void setCustomer(Customer customer) {
         this.customer = customer;
     }
 

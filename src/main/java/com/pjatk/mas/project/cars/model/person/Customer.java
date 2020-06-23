@@ -93,7 +93,7 @@ public class Customer extends Person<Long> {
         return drivingLicense;
     }
 
-    public void setDrivingLicense(DrivingLicense drivingLicense) {
+    private void setDrivingLicense(DrivingLicense drivingLicense) {
         this.drivingLicense = drivingLicense;
     }
 

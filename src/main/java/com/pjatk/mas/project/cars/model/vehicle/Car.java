@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.enums.EngineType;
 import com.pjatk.mas.project.cars.model.person.employees.Manager;
+import com.pjatk.mas.project.cars.repos.CarRepository;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -256,7 +257,7 @@ public class Car {
         this.managers = managers;
     }
 
-    public void setEngine(@NotNull Engine engine) {
+    private void setEngine(@NotNull Engine engine) {
         this.engine = engine;
     }
 

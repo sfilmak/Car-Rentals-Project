@@ -33,7 +33,7 @@ public class Engine {
     public Engine(){}
 
     Engine(@NotNull Car car, @NotBlank String name, @NotNull EngineType type) {
-        this.setCar(car);
+        this.car = car;
         this.setName(name);
         this.setType(type);
     }
@@ -88,7 +88,7 @@ public class Engine {
         return car;
     }
 
-    public void setCar(Car car){
+    private void setCar(Car car) {
         this.car = car;
     }
 
