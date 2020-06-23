@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
 
 @Entity(name = "DrivingLicense")
 @Table(name = "driving_license")
@@ -81,6 +81,6 @@ public class DrivingLicense {
     }
 
     public static boolean isAllowedInPoland(DrivingLicense drivingLicense){
-        return ChronoUnit.YEARS.between(drivingLicense.getCustomer().getBirthdate(), LocalDate.now()) >= allowedAgeForDriving;
+        return Period.between(drivingLicense.getCustomer().getBirthdate(), LocalDate.now()).getYears() >= allowedAgeForDriving;
     }
 }

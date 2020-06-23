@@ -177,7 +177,7 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [engine, setEngine] = useState('')
     const [startDate, setStartDate] = useState(dayjs())
     const [endDate, setEndDate] = useState(dayjs())
-    const [comments, setComments] = useState('No comments')
+    const [comments, setComments] = useState("No comments")
 
     const [isCustomerSelected, setIsCustomerSelected] = useState(false);
     const [isStartDateCorrect, setISStartDateCorrect] = useState(false);
@@ -185,10 +185,23 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [isReviewTypeSelected, setIsReviewTypeSelected] = useState(false);
     const [isMechanicSelected, setIsMechanicSelected] = useState(false);
 
+    const [rentalStartMessage, setRentalStartMessage] = React.useState('Select start date');
+    const [rentalStartCorrectness, setRentalStartCorrectness] = React.useState(false);
+    const [rentalEndMessage, setRentalEndMessage] = React.useState('Select end date');
+    const [rentalEndCorrectness, setRentalEndCorrectness] = React.useState(false);
+
     const handleStartDateChange = () => {
         const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
-        console.log("HandleStartDateChange");
-        setISStartDateCorrect(!checkIsDateBetweenDates(receivedDate));
+        const checkedDate = !checkIsDateBetweenDates(receivedDate);
+        const notInPast = receivedDate.isAfter(dayjs())
+        setISStartDateCorrect(checkedDate && notInPast);
+        if(checkedDate && notInPast){
+            setRentalStartMessage('Car rental start date');
+            setRentalStartCorrectness(false);
+        } else {
+            setRentalStartMessage('Error: select different date');
+            setRentalStartCorrectness(true);
+        }
         setStartDate(receivedDate.add(1, 'day'))
     };
 
@@ -233,8 +246,6 @@ const CarInfo = ({cars, customers, specializations}) => {
             .then((data) => {
                 setCarRentals(data._embedded.carRentals)
             })
-
-        
     }, [])
 
     const handleCustomerSelection = (event) => {
@@ -272,10 +283,8 @@ const CarInfo = ({cars, customers, specializations}) => {
         loadListOfServices();
     };
 
-    const handleCommentsChange = (data) => {
-        console.log("Comments changed: " + data);
-        setComments(data);
-        //setOpen(false);
+    const handleCommentsChange = () => {
+        setComments(document.getElementById("commentsInput").value);
     };
 
     function loadListOfServices() {
@@ -288,30 +297,35 @@ const CarInfo = ({cars, customers, specializations}) => {
     }
 
     const buttonClick = () => {
-        /*axios.post('api/technicalInspections', {
-            date: dayjs().add(2, 'day'),
-            arePartsReplaced: true,
-            carMileage: 5000,
-            type: 'ENGINE',
-            mechanic: 'http://localhost:8080/api/mechanics/31',
-            car: 'http://localhost:8080/api/cars/23'
-        })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });*/
         axios.post('api/carRentals', {
             startDate: startDate,
             endDate: endDate,
-            comments: "Comments MWR",
+            comments: comments,
             rentalStatus: 'PLANNED',
             car: 'http://localhost:8080/api/cars/' + carID,
             customer: 'http://localhost:8080/api/customers/' + customerID,
         })
-            .then(function (response) {
+            .then(response => {
                 console.log(response);
+                return axios.post('api/orderBonuses', {
+                    bonusForOrder: 330,
+                    carRental: response.data._links.carRental.href,
+                    consultant: 'http://localhost:8080/api/consultants/20'
+                })
+            })
+            .then(response => {
+                console.log("Second response: " + response);
+                return axios.post('api/technicalInspections', {
+                    date: dayjs(),
+                    arePartsReplaced: true,
+                    carMileage: 5000,
+                    type: 'ENGINE',
+                    mechanic: 'http://localhost:8080/api/mechanics/' + mechanicID,
+                    car: 'http://localhost:8080/api/cars/' + carID
+                })
+            })
+            .then(response => {
+                console.log("Third response: " + response);
             })
             .catch(function (error) {
                 console.log(error);
@@ -400,8 +414,9 @@ const CarInfo = ({cars, customers, specializations}) => {
                                         <TextField
                                             disabled={!isCustomerSelected}
                                             id="rentalStartDate"
-                                            label="Rental start date"
+                                            label={rentalStartMessage}
                                             type="date"
+                                            error={rentalStartCorrectness}
                                             onChange={handleStartDateChange}
                                             className={classes.textField}
                                             InputLabelProps={{
@@ -413,8 +428,9 @@ const CarInfo = ({cars, customers, specializations}) => {
                                         <TextField
                                             disabled={!isStartDateCorrect}
                                             id="rentalEndDate"
-                                            label="Rental end date"
+                                            label={rentalEndMessage}
                                             type="date"
+                                            error={rentalEndCorrectness}
                                             onChange={handleEndDateChange}
                                             className={classes.textField}
                                             InputLabelProps={{
@@ -455,7 +471,7 @@ const CarInfo = ({cars, customers, specializations}) => {
 
                                     <h2 className={classes.formTitle}>Additional comments</h2>
                                     <TextField className={classes.inputField}
-                                               id="standard-full-width"
+                                               id="commentsInput"
                                                style={{margin: 8}}
                                                placeholder="Additional comments..."
                                                onBlur={handleCommentsChange}
@@ -465,7 +481,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                                                    shrink: true,
                                                }}
                                     />
-                                    <Button disabled={!isMechanicSelected} variant="contained" size="large"
+                                    <Button disabled={!isMechanicSelected && !isReviewTypeSelected && !isEndDateCorrect && !isStartDateCorrect && !isCustomerSelected} variant="contained" size="large"
                                             className={classes.bookButton}
                                             onClick={buttonClick}>
                                         Book a car

@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Consultant")
+@Table(name = "consultant")
 @PrimaryKeyJoinColumn(name="EMPLOYEE_ID")
 public class Consultant extends Employee {
 

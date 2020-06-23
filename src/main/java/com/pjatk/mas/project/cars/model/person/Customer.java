@@ -96,10 +96,4 @@ public class Customer extends Person<Long> {
     public void setDrivingLicense(DrivingLicense drivingLicense) {
         this.drivingLicense = drivingLicense;
     }
-
-    public static void isAllowedInPoland(Long licenseID){
-        //TODO
-    }
-
-
 }

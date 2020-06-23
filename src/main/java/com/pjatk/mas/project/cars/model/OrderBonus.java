@@ -6,16 +6,15 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class OrderBonus {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderBonusID;
 
     private double bonusForOrder;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "car_rentalid")
+    @NotNull(message = "OrderBonus should have a car rental!")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "car_rentalid", nullable = false)
     private CarRental carRental;
 
     @NotNull(message = "OrderBonus should have a consultant!")
