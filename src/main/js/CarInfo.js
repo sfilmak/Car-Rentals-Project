@@ -29,6 +29,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime)
 import axios from "axios";
 
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -192,6 +198,13 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [rentalEndMessage, setRentalEndMessage] = React.useState('Select end date');
     const [rentalEndCorrectness, setRentalEndCorrectness] = React.useState(false);
 
+    const [openFinalDialog, setFinalDialogOpen] = React.useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const [isRentalAdded, setRentalAdded] = React.useState(false);
+    const [rentalStatusHeader, setRentalStatusHeader] = React.useState('Customer can not drive!');
+    const [rentalStatusComment, setRentalStatusComment] = React.useState('Sorry, but this customer can not drive - he/she is too young. Please, select a different customer.');
+
     const handleStartDateChange = () => {
         const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
         const checkedDate = !checkIsDateBetweenDates(receivedDate);
@@ -258,12 +271,12 @@ const CarInfo = ({cars, customers, specializations}) => {
 
     const handleTechnicalInspectionSelection = (event) => {
         setTiID(event.target.value);
-        //Load mechanics
         fetch('api/specializations/' + event.target.value + '/mechanics')
             .then(res => res.json())
             .then((data) => {
                 setMechanics(data._embedded.mechanics)
                 setIsReviewTypeSelected(true);
+                setMechanicID('');
             })
     };
 
@@ -319,7 +332,21 @@ const CarInfo = ({cars, customers, specializations}) => {
         }
     }
 
+    const handleFinalDialogClickOpen = () => {
+        setFinalDialogOpen(true);
+    };
+
+    const handleFinalDialogClose = () => {
+        if(isRentalAdded){
+            window.open("http://localhost:8080/","_self")
+        } else {
+            setFinalDialogOpen(false);
+        }
+    };
+
     const buttonClick = () => {
+        setRentalStatusHeader("Done!");
+        setRentalStatusComment("Awesome, a new car rental was created!");
         console.log(canCustomerDrive());
         if(canCustomerDrive() === true){
             console.log("Customer can drive!");
@@ -341,6 +368,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                 })
                 .then(response => {
                     console.log("Second response: " + response);
+                    setRentalAdded(true);
                     return axios.post('api/technicalInspections', {
                         date: dayjs(),
                         arePartsReplaced: true,
@@ -352,12 +380,15 @@ const CarInfo = ({cars, customers, specializations}) => {
                 })
                 .then(response => {
                     console.log("Third response: " + response);
+                    handleFinalDialogClickOpen();
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         } else {
-            console.log("Wait, he/she cannot drive yeat!");
+            setRentalStatusHeader("This customer can not drive!");
+            setRentalStatusComment("Sorry, but this customer can not drive - he/she is too young. Please, select a different customer.");
+            handleFinalDialogClickOpen();
         }
     };
 
@@ -529,6 +560,24 @@ const CarInfo = ({cars, customers, specializations}) => {
                     Service history
                 </DialogTitle>
                 <CustomizedDialogs listOfServices={services}/>
+            </Dialog>
+
+            <Dialog
+                fullScreen={fullScreen}
+                open={openFinalDialog}
+                onClose={handleFinalDialogClose}
+                aria-labelledby="responsive-dialog-title">
+                <DialogTitle> {rentalStatusHeader}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {rentalStatusComment}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleFinalDialogClose} color="primary" autoFocus>
+                        Okay
+                    </Button>
+                </DialogActions>
             </Dialog>
         </div>
     );

@@ -38,7 +38,8 @@ public class CarSellingProjectApplication {
 									DrivingLicenseRepository drivingLicenseRepo,
 									HRRepo hrRepo,
 									CarRepository carRepo,
-									OrderBonusRepo orderBonusRepo) {
+									OrderBonusRepo orderBonusRepo,
+									MechanicRepository mechanicRepo) {
 		return (args) -> {
 			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg",
@@ -116,10 +117,21 @@ public class CarSellingProjectApplication {
 			hrRepo.save(newHR);
 
 			Specialization specialization = new Specialization("Strong", InspectionType.ENGINE);
+			Specialization specialization2 = new Specialization("Medium", InspectionType.ELECTRONICS);
 
 			Mechanic newMechanic = new Mechanic("Viktor", "Litovchenko", LocalDate.of(2000, Month.MAY, 28),
 					3000, "nu_da@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
 					specialization);
+
+			Mechanic newMechanic2 = new Mechanic("Maksym", "Bordun", LocalDate.of(2000, Month.FEBRUARY, 28),
+					5000, "ff@rr.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
+					specialization2);
+
+			Mechanic newMechanic3 = new Mechanic("Artem", "Andreoli", LocalDate.of(2000, Month.DECEMBER, 12),
+					2000, "ff@rr.com", EmployeeStatus.INTERN, null, LocalDate.of(2020, Month.MAY, 12), LocalDate.of(2021, Month.MAY, 12),
+					specialization2);
+
+			mechanicRepo.saveAll(Arrays.asList(newMechanic2, newMechanic3));
 
 			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JULY, 29), true, 150000L, InspectionType.ENGINE, car3, newMechanic);
 			techRepo.save(technicalInspection);
