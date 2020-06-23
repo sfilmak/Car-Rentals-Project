@@ -1,6 +1,7 @@
 package com.pjatk.mas.project.cars.model.person.employees;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pjatk.mas.project.cars.model.CarRental;
 import com.pjatk.mas.project.cars.model.OrderBonus;
 import com.pjatk.mas.project.cars.model.enums.EmployeeStatus;
 import javax.persistence.*;
@@ -54,8 +55,14 @@ public class Consultant extends Employee {
         }
     }
 
-    //It is not possible to remove order bonus
-    //Because of the 1-1 relation between OrderBonus and CarRental
-    //It means that Consultant will always get a bonus
-    //for any rental, but this bonus may be set to 0
+    public void removeOrderBonus(OrderBonus orderBonus) {
+        if(orderBonus == null) {
+            throw new IllegalArgumentException("Order bonus cannot be null or empty");
+        }
+        if(this.orderBonuses.contains(orderBonus)) {
+            this.orderBonuses.remove(orderBonus);
+            CarRental tempRental = orderBonus.getCarRental();
+            tempRental.removeOrderBonus(orderBonus);
+        }
+    }
 }

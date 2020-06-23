@@ -1,8 +1,6 @@
 package com.pjatk.mas.project.cars.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.person.employees.Consultant;
-import org.springframework.data.rest.core.annotation.RestResource;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -23,8 +21,6 @@ public class OrderBonus {
     @NotNull(message = "OrderBonus should have a consultant!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "employee_id", nullable = false)
-    @JsonManagedReference
-    @RestResource(exported=false)
     private Consultant consultant;
 
     public OrderBonus(){}
@@ -70,6 +66,6 @@ public class OrderBonus {
 
     private void addOrderBonus() {
         getConsultant().addOrderBonus(this);
-        getCarRental().setOrderBonus(this);
+        getCarRental().addOrderBonus(this);
     }
 }

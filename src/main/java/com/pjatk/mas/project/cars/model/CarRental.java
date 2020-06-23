@@ -1,9 +1,11 @@
 package com.pjatk.mas.project.cars.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pjatk.mas.project.cars.model.enums.RentalStatus;
 import com.pjatk.mas.project.cars.model.person.Customer;
+import com.pjatk.mas.project.cars.model.person.employees.Consultant;
 import com.pjatk.mas.project.cars.model.vehicle.Car;
 import org.springframework.data.rest.core.annotation.RestResource;
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "CarRental")
 @Table(name = "carRental")
@@ -40,27 +44,19 @@ public class CarRental {
     @NotNull(message = "CarRental should have a car!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "car_id", nullable = false)
-    @JsonManagedReference
-    @RestResource(exported=false)
-    @JsonBackReference
     private Car car;
 
     @NotNull(message = "CarRental should have a customer!")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonManagedReference
-    @RestResource(exported=false)
-    @JsonBackReference
     private Customer customer;
 
-    @NotNull(message = "CarRental should have an order bonus!")
-    @OneToOne(mappedBy = "carRental",
-            fetch = FetchType.LAZY, optional = false,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonManagedReference
-    @RestResource(exported=false)
-    @JsonBackReference
-    private OrderBonus orderBonus;
+    //Association with an OrderBonus
+    @OneToMany(mappedBy = "carRental", fetch = FetchType.LAZY)
+    @NotNull
+    @Column(nullable = false)
+    @JsonIgnore
+    private final Set<OrderBonus> orderBonuses = new HashSet<>();
 
     public CarRental(){}
 
@@ -156,11 +152,32 @@ public class CarRental {
         this.rentalStatus = rentalStatus;
     }
 
-    public OrderBonus getOrderBonus() {
-        return orderBonus;
+    public void addOrderBonus(OrderBonus orderBonus) {
+        if(orderBonus == null) {
+            throw new IllegalArgumentException("Order bonus attribute cannot be null");
+        }
+        if(!this.orderBonuses.contains(orderBonus)) {
+            orderBonuses.add(orderBonus);
+        }
     }
 
-    public void setOrderBonus(@NotNull OrderBonus orderBonus) {
-        this.orderBonus = orderBonus;
+    public void removeOrderBonus(OrderBonus orderBonus) {
+        if(orderBonus == null) {
+            throw new IllegalArgumentException("Order bonus cannot be null or empty");
+        }
+        if(this.orderBonuses.contains(orderBonus)) {
+            this.orderBonuses.remove(orderBonus);
+            Consultant tempConsultant = orderBonus.getConsultant();
+            tempConsultant.removeOrderBonus(orderBonus);
+        }
+    }
+
+    @JsonIgnore
+    public Set<OrderBonus> getOrderBonuses() {
+        return new HashSet<>(orderBonuses);
+    }
+
+    public void setRentalStatus(RentalStatus rentalStatus) {
+        this.rentalStatus = rentalStatus;
     }
 }

@@ -25,6 +25,7 @@ import Select from '@material-ui/core/Select';
 import Dialog from "@material-ui/core/Dialog";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -175,6 +176,8 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [carRentals, setCarRentals] = useState([]);
     const [engine, setEngine] = useState('')
     const [startDate, setStartDate] = useState(dayjs())
+    const [endDate, setEndDate] = useState(dayjs())
+    const [comments, setComments] = useState('No comments')
 
     const [isCustomerSelected, setIsCustomerSelected] = useState(false);
     const [isStartDateCorrect, setISStartDateCorrect] = useState(false);
@@ -186,7 +189,7 @@ const CarInfo = ({cars, customers, specializations}) => {
         const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
         console.log("HandleStartDateChange");
         setISStartDateCorrect(!checkIsDateBetweenDates(receivedDate));
-        setStartDate(receivedDate)
+        setStartDate(receivedDate.add(1, 'day'))
     };
 
     const handleEndDateChange = () => {
@@ -196,6 +199,7 @@ const CarInfo = ({cars, customers, specializations}) => {
         const afterStartDate = receivedEndDate.isAfter(startDate)
         //const oldDatesNotBetweenNew = !checkIsDateBetweenDates(receivedEndDate);
         setIsEndDateCorrect(notBetweenCurrDates && afterStartDate);
+        setEndDate(receivedEndDate.add(1, 'day'));
     };
 
     function checkIsDateBetweenDates(givenDate) {
@@ -229,6 +233,8 @@ const CarInfo = ({cars, customers, specializations}) => {
             .then((data) => {
                 setCarRentals(data._embedded.carRentals)
             })
+
+        
     }, [])
 
     const handleCustomerSelection = (event) => {
@@ -266,6 +272,12 @@ const CarInfo = ({cars, customers, specializations}) => {
         loadListOfServices();
     };
 
+    const handleCommentsChange = (data) => {
+        console.log("Comments changed: " + data);
+        setComments(data);
+        //setOpen(false);
+    };
+
     function loadListOfServices() {
         fetch('api/cars/' + carID + '/technicalInspectionsSet')
             .then(res => res.json())
@@ -274,6 +286,37 @@ const CarInfo = ({cars, customers, specializations}) => {
                 setOpen(true);
             })
     }
+
+    const buttonClick = () => {
+        /*axios.post('api/technicalInspections', {
+            date: dayjs().add(2, 'day'),
+            arePartsReplaced: true,
+            carMileage: 5000,
+            type: 'ENGINE',
+            mechanic: 'http://localhost:8080/api/mechanics/31',
+            car: 'http://localhost:8080/api/cars/23'
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });*/
+        axios.post('api/carRentals', {
+            startDate: startDate,
+            endDate: endDate,
+            comments: "Comments MWR",
+            rentalStatus: 'PLANNED',
+            car: 'http://localhost:8080/api/cars/' + carID,
+            customer: 'http://localhost:8080/api/customers/' + customerID,
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     return (
         <div>
@@ -415,6 +458,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                                                id="standard-full-width"
                                                style={{margin: 8}}
                                                placeholder="Additional comments..."
+                                               onBlur={handleCommentsChange}
                                                fullWidth
                                                margin="normal"
                                                InputLabelProps={{
@@ -422,7 +466,8 @@ const CarInfo = ({cars, customers, specializations}) => {
                                                }}
                                     />
                                     <Button disabled={!isMechanicSelected} variant="contained" size="large"
-                                            className={classes.bookButton}>
+                                            className={classes.bookButton}
+                                            onClick={buttonClick}>
                                         Book a car
                                     </Button>
                                 </div>
