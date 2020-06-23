@@ -25,6 +25,8 @@ import Select from '@material-ui/core/Select';
 import Dialog from "@material-ui/core/Dialog";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime)
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -209,9 +211,16 @@ const CarInfo = ({cars, customers, specializations}) => {
         const receivedEndDate = dayjs(document.getElementById("rentalEndDate").value);
         console.log("HandleEndDateChange: " + document.getElementById("rentalEndDate").value);
         const notBetweenCurrDates = !checkIsDateBetweenDates(receivedEndDate);
-        const afterStartDate = receivedEndDate.isAfter(startDate)
+        const afterStartDate = receivedEndDate.isAfter(startDate.subtract(1, 'day'))
         //const oldDatesNotBetweenNew = !checkIsDateBetweenDates(receivedEndDate);
         setIsEndDateCorrect(notBetweenCurrDates && afterStartDate);
+        if(notBetweenCurrDates && afterStartDate){
+            setRentalEndMessage('Car rental end date');
+            setRentalEndCorrectness(false);
+        } else {
+            setRentalEndMessage('Error: select different end date');
+            setRentalEndCorrectness(true);
+        }
         setEndDate(receivedEndDate.add(1, 'day'));
     };
 
@@ -234,12 +243,6 @@ const CarInfo = ({cars, customers, specializations}) => {
             .then(res => res.json())
             .then((data) => {
                 setEngine(data)
-            })
-
-        fetch('api/cars/' + carID + '/carRentals')
-            .then(res => res.json())
-            .then((data) => {
-                setCarRentals(data._embedded.carRentals)
             })
         fetch('api/cars/' + carID + '/carRentals')
             .then(res => res.json())
@@ -296,40 +299,53 @@ const CarInfo = ({cars, customers, specializations}) => {
             })
     }
 
-    const buttonClick = () => {
-        axios.post('api/carRentals', {
-            startDate: startDate,
-            endDate: endDate,
-            comments: comments,
-            rentalStatus: 'PLANNED',
-            car: 'http://localhost:8080/api/cars/' + carID,
-            customer: 'http://localhost:8080/api/customers/' + customerID,
+    function canCustomerDrive() {
+        const result = customers.filter(obj => {
+            return obj.id === customerID
         })
-            .then(response => {
-                console.log(response);
-                return axios.post('api/orderBonuses', {
-                    bonusForOrder: 330,
-                    carRental: response.data._links.carRental.href,
-                    consultant: 'http://localhost:8080/api/consultants/20'
+
+        return dayjs().from(dayjs(result.birthdate)) >= 18;
+    }
+
+    const buttonClick = () => {
+        if(canCustomerDrive() === true){
+            console.log("Customer can drive!");
+            axios.post('api/carRentals', {
+                startDate: startDate,
+                endDate: endDate,
+                comments: comments,
+                rentalStatus: 'PLANNED',
+                car: 'http://localhost:8080/api/cars/' + carID,
+                customer: 'http://localhost:8080/api/customers/' + customerID,
+            })
+                .then(response => {
+                    console.log(response);
+                    return axios.post('api/orderBonuses', {
+                        bonusForOrder: 330,
+                        carRental: response.data._links.carRental.href,
+                        consultant: 'http://localhost:8080/api/consultants/20'
+                    })
                 })
-            })
-            .then(response => {
-                console.log("Second response: " + response);
-                return axios.post('api/technicalInspections', {
-                    date: dayjs(),
-                    arePartsReplaced: true,
-                    carMileage: 5000,
-                    type: 'ENGINE',
-                    mechanic: 'http://localhost:8080/api/mechanics/' + mechanicID,
-                    car: 'http://localhost:8080/api/cars/' + carID
+                .then(response => {
+                    console.log("Second response: " + response);
+                    return axios.post('api/technicalInspections', {
+                        date: dayjs(),
+                        arePartsReplaced: true,
+                        carMileage: 5000,
+                        type: 'ENGINE',
+                        mechanic: 'http://localhost:8080/api/mechanics/' + mechanicID,
+                        car: 'http://localhost:8080/api/cars/' + carID
+                    })
                 })
-            })
-            .then(response => {
-                console.log("Third response: " + response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(response => {
+                    console.log("Third response: " + response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            console.log("Wait, he/she cannot drive yeat!");
+        }
     };
 
     return (
@@ -448,7 +464,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                                             onChange={handleTechnicalInspectionSelection}>
                                             {specializations.map((specialization) => (
                                                 <MenuItem value={specialization.specializationID}>{
-                                                    <span>{specialization.experience} + {specialization.inspectionType}</span>}</MenuItem>
+                                                    <span>{specialization.inspectionType} inspection ({specialization.experience} experience)</span>}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -484,6 +500,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                                     <Button disabled={!isMechanicSelected && !isReviewTypeSelected && !isEndDateCorrect && !isStartDateCorrect && !isCustomerSelected} variant="contained" size="large"
                                             className={classes.bookButton}
                                             onClick={buttonClick}>
+                                        {!isMechanicSelected && !isReviewTypeSelected && !isEndDateCorrect && !isStartDateCorrect && !isCustomerSelected}
                                         Book a car
                                     </Button>
                                 </div>

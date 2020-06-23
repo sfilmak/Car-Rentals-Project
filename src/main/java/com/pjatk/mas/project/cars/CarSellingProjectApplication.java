@@ -90,6 +90,12 @@ public class CarSellingProjectApplication {
 					"pal@gmail.com", "+48328382324", "Stara Praga",
 					229L, LocalDate.of(2020, Month.JANUARY, 20), "Belarus");
 
+			Customer customer3 = new Customer("Little", "Bell", LocalDate.of(2011, Month.MAY, 6),
+					"bell@gmail.com", "+9393", "London",
+					250L, LocalDate.of(2020, Month.JANUARY, 20), "UK");
+
+			customerRepo.save(customer3);
+
 			Consultant consultant1 = new Consultant("Yuta", "Maejima", LocalDate.of(1999, Month.OCTOBER, 4), 15000,
 					"ksks@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2020, Month.JANUARY, 16),
 					null, null, "Warsaw");
