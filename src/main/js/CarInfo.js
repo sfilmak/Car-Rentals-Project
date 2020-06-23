@@ -299,15 +299,28 @@ const CarInfo = ({cars, customers, specializations}) => {
             })
     }
 
-    function canCustomerDrive() {
-        const result = customers.filter(obj => {
-            return obj.id === customerID
-        })
+    function getCustomerByID(arr, value) {
+        const result = arr.filter(function (o) {
+            return o.id === value;
+        });
+        return result? result[0] : null; // or undefined
+    }
 
-        return dayjs().from(dayjs(result.birthdate)) >= 18;
+    function canCustomerDrive() {
+        const resultOfCustomer = getCustomerByID(customers, customerID);
+        console.log(customerID);
+        console.log(resultOfCustomer.birthdate);
+        console.log(dayjs().diff(dayjs(resultOfCustomer.birthdate), "years"));
+        console.log(dayjs().from(dayjs(resultOfCustomer.birthdate)));
+        if(dayjs().diff(dayjs(resultOfCustomer.birthdate), "years") >= 18){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     const buttonClick = () => {
+        console.log(canCustomerDrive());
         if(canCustomerDrive() === true){
             console.log("Customer can drive!");
             axios.post('api/carRentals', {
@@ -323,7 +336,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                     return axios.post('api/orderBonuses', {
                         bonusForOrder: 330,
                         carRental: response.data._links.carRental.href,
-                        consultant: 'http://localhost:8080/api/consultants/20'
+                        consultant: 'http://localhost:8080/api/consultants/21'
                     })
                 })
                 .then(response => {
