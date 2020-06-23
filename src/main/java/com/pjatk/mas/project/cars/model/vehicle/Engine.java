@@ -28,6 +28,7 @@ public class Engine {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
+    @NotNull
     private Car car;
 
     public Engine(){}

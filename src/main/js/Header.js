@@ -25,7 +25,6 @@ const useStyles = makeStyles(() => ({
 
 export default function Header() {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <AppBar position="static" className={classes.toolbar_style}>

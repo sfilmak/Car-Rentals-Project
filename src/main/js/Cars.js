@@ -1,8 +1,8 @@
 import React from 'react'
-import styled from "styled-components";
 import { makeStyles } from '@material-ui/core/styles';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import GridList from "./gridLayout/GridList";
 
 import {
     Link
@@ -36,24 +36,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const GridList = styled.div`
-    display: flex;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    list-style:none;
-    margin-right: 100px;
-    margin-left: 100px;
-    justify-content: space-around;
-    @media (min-width: 768px) {
-        margin-right: 0;
-        margin-left: 0;
-    }
-`;
-
 const Cars = ({ cars }) => {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <GridList>

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -23,7 +22,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Dialog from "@material-ui/core/Dialog";
-import styled from "styled-components";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime)
@@ -34,142 +32,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: "flex",
-        flexWrap: "wrap",
-    },
-    paper: {
-        padding: theme.spacing(2),
-        color: theme.palette.text.secondary,
-        marginBottom: '20px',
-        marginTop: '20px',
-    },
-    gridSubtile: {
-        background: 'rgba(0, 0, 0, 0.8)'
-    },
-    gridTile: {
-        height: '260px',
-        marginBottom: '20px',
-        marginTop: '20px',
-        "::marker": {
-            display: 'none',
-        },
-    },
-    title: {
-        fontSize: '1.25rem',
-    },
-    subtitle: {
-        fontSize: '1rem',
-    },
-    button_service: {
-        textAlign: "center",
-        width: "100%",
-        backgroundColor: '#FF775A',
-        '&:hover': {
-            backgroundColor: '#f32e00',
-            borderColor: '#f62900',
-            boxShadow: 'none',
-        },
-        color: "white",
-    },
-    carInfoList: {
-        width: '100%',
-        marginTop: "20px",
-    },
-    list_avatar: {
-        backgroundColor: '#FF775A',
-    },
-    selectorList: {
-        width: "100%",
-    },
-    formControl: {
-        minWidth: 120,
-        width: "100%",
-        margin: "0px !important",
-    },
-    paperContent: {
-        margin: "20px",
-    },
-    input: {
-        '&:focus': {
-            borderColor: '#FF775A',
-        },
-    },
-    formTitle: {
-        margin: "0px !important",
-        color: "black",
-        marginTop: "20px !important",
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: "100%",
-        margin: "0px !important",
-        '& label.Mui-focused': {
-            color: 'red',
-        },
-        '& .MuiInput-underline:after': {
-            borderBottomColor: '#FF775A',
-        },
-    },
-    bookButton: {
-        marginTop: "35px",
-        marginBottom: "10px",
-        textAlign: "center",
-        display: "block",
-        margin: "0 auto",
-        backgroundColor: '#ff2c00',
-        '&:hover': {
-            backgroundColor: '#d42a00',
-            borderColor: '#cb2200',
-            boxShadow: 'none',
-        },
-        color: "white",
-    },
-    inputField: {
-        minWidth: 120,
-        width: "100%",
-        margin: "0px !important",
-        '& label.Mui-focused': {
-            color: '#FF775A',
-        },
-        '& .MuiInput-underline:after': {
-            borderBottomColor: '#FF775A',
-        },
-    },
-    selectorColor: {
-        '&:after': {
-            borderColor: '#FF775A',
-        }
-    },
-    notFoundLabel: {
-        textAlign: "center",
-    },
-}));
-
-const GridHalf = styled.div`
-    flex: 50%;
-`;
-
-const GridCellLeft = styled.div`
-    margin-right: 40px;
-    margin-left: 40px;
-      @media (min-width: 768px) {
-       margin-right: 20px;
-       margin-left: 150px;
-    }
-`;
-
-const GridCellRight = styled.div`
-      margin-right: 40px;
-      margin-left: 40px;
-      @media (min-width: 768px) { 
-        margin-right: 150px;
-        margin-left: 20px;
-    }
-`;
+import useStyles from "./CarInfoStyles";
+import GridCellRight from "./gridLayout/GridCellRight";
+import GridHalf from "./gridLayout/GridHalf";
+import GridCellLeft from "./gridLayout/GridCellLeft";
 
 const CarInfo = ({cars, customers, specializations}) => {
     const classes = useStyles();
@@ -192,7 +58,7 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [isEndDateCorrect, setIsEndDateCorrect] = useState(false);
     const [isReviewTypeSelected, setIsReviewTypeSelected] = useState(false);
     const [isMechanicSelected, setIsMechanicSelected] = useState(false);
-
+    const [isEndDateWasChanged, setEndDateWasChanged] = useState(false);
     const [isButtonDisabled, setButtonDisabled] = useState(true)
 
     const [rentalStartMessage, setRentalStartMessage] = React.useState('Select start date');
@@ -206,19 +72,32 @@ const CarInfo = ({cars, customers, specializations}) => {
     const [isRentalAdded, setRentalAdded] = React.useState(false);
     const [rentalStatusHeader, setRentalStatusHeader] = React.useState('Customer can not drive!');
     const [rentalStatusComment, setRentalStatusComment] = React.useState('Sorry, but this customer can not drive - he/she is too young. Please, select a different customer.');
-
     const [inspectionType, setInspectionType] = React.useState('ENGINE');
 
     const handleStartDateChange = () => {
         const receivedDate = dayjs(document.getElementById("rentalStartDate").value);
+        if(isEndDateWasChanged){
+            handleEndDate(receivedDate);
+        }
         const checkedDate = !checkIsDateBetweenDates(receivedDate);
         const notInPast = receivedDate.isAfter(dayjs())
         setISStartDateCorrect(checkedDate && notInPast);
         if(checkedDate && notInPast){
-            setRentalStartMessage('Car rental start date');
-            setRentalStartCorrectness(false);
-            if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isEndDateCorrect) {
-                setButtonDisabled(false);
+            let beforeEndDate = true;
+            if(isEndDateWasChanged){
+                beforeEndDate = receivedDate.isBefore(endDate.subtract(1, 'day'))
+            }
+            if(beforeEndDate){
+                setRentalStartMessage('Car rental start date');
+                setRentalStartCorrectness(false);
+                if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isEndDateCorrect) {
+                    setButtonDisabled(false);
+                }
+            } else {
+                setRentalStartMessage('Error: start date after end date');
+                setRentalStartCorrectness(true);
+                setButtonDisabled(true);
+                setISStartDateCorrect(false);
             }
         } else {
             setRentalStartMessage('Error: select different date');
@@ -226,39 +105,56 @@ const CarInfo = ({cars, customers, specializations}) => {
             setButtonDisabled(true);
         }
         setStartDate(receivedDate.add(1, 'day'));
-
     };
 
     const handleEndDateChange = () => {
+        setEndDateWasChanged(true);
+        handleEndDate(startDate);
+    };
+
+    function handleEndDate(startDate){
         const receivedEndDate = dayjs(document.getElementById("rentalEndDate").value);
-        console.log("HandleEndDateChange: " + document.getElementById("rentalEndDate").value);
         const notBetweenCurrDates = !checkIsDateBetweenDates(receivedEndDate);
         const afterStartDate = receivedEndDate.isAfter(startDate.subtract(1, 'day'))
-        //const oldDatesNotBetweenNew = !checkIsOldDateBetweenDates(receivedEndDate);
-        setIsEndDateCorrect(notBetweenCurrDates && afterStartDate);
-        if(notBetweenCurrDates && afterStartDate){
+        const oldDatesNotBetweenNew = !checkIsOldDateBetweenDates(receivedEndDate, startDate);
+
+        if(notBetweenCurrDates && afterStartDate && oldDatesNotBetweenNew){
+            setIsEndDateCorrect(true);
             setRentalEndMessage('Car rental end date');
             setRentalEndCorrectness(false);
             if(isCustomerSelected && isMechanicSelected && isReviewTypeSelected && isStartDateCorrect) {
                 setButtonDisabled(false);
             }
         } else {
+            setIsEndDateCorrect(false);
             setRentalEndMessage('Error: select different end date');
             setRentalEndCorrectness(true);
             setButtonDisabled(true);
         }
         setEndDate(receivedEndDate.add(1, 'day'));
+    }
 
-    };
-
-    function checkIsDateBetweenDates(givenDate) {
+    function checkIsOldDateBetweenDates(givenDate, startDateMain) {
         for (let i = 0; i < carRentals.length; i++) {
-            if (validateDateBetweenTwoDates(dayjs(carRentals[i].startDate), dayjs(carRentals[i].endDate), givenDate)) {
-                console.log('You cannot rent this car in this time period!');
+            if (!validateEndDate(dayjs(carRentals[i].startDate), dayjs(carRentals[i].endDate), givenDate, startDateMain)) {
                 return true;
             }
         }
         return false;
+    }
+
+    function checkIsDateBetweenDates(givenDate) {
+        for (let i = 0; i < carRentals.length; i++) {
+            if (validateDateBetweenTwoDates(dayjs(carRentals[i].startDate), dayjs(carRentals[i].endDate), givenDate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function validateEndDate(startDateRentals, endDateRentals, givenEndDate, startDate) {
+        return (startDate.isBefore(startDateRentals) && givenEndDate.isBefore(startDateRentals)) ||
+                (startDate.isAfter(endDateRentals) && givenEndDate.isAfter(endDateRentals));
     }
 
     function validateDateBetweenTwoDates(startDate, endDate, givenDate) {
@@ -285,11 +181,9 @@ const CarInfo = ({cars, customers, specializations}) => {
 
     const handleTechnicalInspectionSelection = (event) => {
         setTiID(event.target.value);
-
-
         setButtonDisabled(true);
         setIsMechanicSelected(false);
-        //setInspectionType(data._embedded.)
+        setInspectionType(getSpecializationByID(specializations, event.target.value).inspectionType);
         fetch('api/specializations/' + event.target.value + '/mechanics')
             .then(res => res.json())
             .then((data) => {
@@ -341,17 +235,16 @@ const CarInfo = ({cars, customers, specializations}) => {
         return result? result[0] : null; // or undefined
     }
 
+    function getSpecializationByID(arr, value) {
+        const result = arr.filter(function (o) {
+            return o.specializationID === value;
+        });
+        return result? result[0] : null; // or undefined
+    }
+
     function canCustomerDrive() {
         const resultOfCustomer = getCustomerByID(customers, customerID);
-        console.log(customerID);
-        console.log(resultOfCustomer.birthdate);
-        console.log(dayjs().diff(dayjs(resultOfCustomer.birthdate), "years"));
-        console.log(dayjs().from(dayjs(resultOfCustomer.birthdate)));
-        if(dayjs().diff(dayjs(resultOfCustomer.birthdate), "years") >= 18){
-            return true;
-        } else {
-            return false;
-        }
+        return dayjs().diff(dayjs(resultOfCustomer.birthdate), "years") >= 18;
     }
 
     const handleFinalDialogClickOpen = () => {
@@ -369,9 +262,7 @@ const CarInfo = ({cars, customers, specializations}) => {
     const buttonClick = () => {
         setRentalStatusHeader("Done!");
         setRentalStatusComment("Awesome, a new car rental was created!");
-        console.log(canCustomerDrive());
         if(canCustomerDrive() === true){
-            console.log("Customer can drive!");
             axios.post('api/carRentals', {
                 startDate: startDate,
                 endDate: endDate,
@@ -381,7 +272,6 @@ const CarInfo = ({cars, customers, specializations}) => {
                 customer: 'http://localhost:8080/api/customers/' + customerID,
             })
                 .then(response => {
-                    console.log(response);
                     return axios.post('api/orderBonuses', {
                         bonusForOrder: 330,
                         carRental: response.data._links.carRental.href,
@@ -389,7 +279,6 @@ const CarInfo = ({cars, customers, specializations}) => {
                     })
                 })
                 .then(response => {
-                    console.log("Second response: " + response);
                     setRentalAdded(true);
                     return axios.post('api/technicalInspections', {
                         date: dayjs(),
@@ -401,7 +290,6 @@ const CarInfo = ({cars, customers, specializations}) => {
                     })
                 })
                 .then(response => {
-                    console.log("Third response: " + response);
                     handleFinalDialogClickOpen();
                 })
                 .catch(function (error) {
@@ -422,7 +310,7 @@ const CarInfo = ({cars, customers, specializations}) => {
                         <GridCellLeft>
                             <h3>Car info</h3>
                             <GridListTile className={classes.gridTile}>
-                                <img src={car.imageURL}/>
+                                <img src={car.imageURL} alt={car.model}/>
                                 <GridListTileBar className={classes.gridSubtile}
                                                  title={<b className={classes.title}>{car.manufacturer} {car.model}</b>}
                                                  subtitle={<span

@@ -26,7 +26,6 @@ public class DrivingLicense {
     //https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
     //Not the best one, but it allows us
     //to keep reference to Driving License from Customer class
-    //and keep reference to Customer from Driving License class
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CUSTOMER_ID")
