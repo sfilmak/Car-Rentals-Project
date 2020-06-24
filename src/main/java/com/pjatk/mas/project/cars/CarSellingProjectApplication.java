@@ -42,7 +42,7 @@ public class CarSellingProjectApplication {
 									MechanicRepository mechanicRepo) {
 		return (args) -> {
 			//REMOVE AFTER FIRST LAUNCH
-			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
+			/*Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg",
 					"Toyota Engine", EngineType.HYBRID);
 
@@ -135,7 +135,7 @@ public class CarSellingProjectApplication {
 			mechanicRepo.saveAll(Arrays.asList(newMechanic2, newMechanic3));
 
 			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JULY, 29), true, 150000L, InspectionType.ENGINE, car3, newMechanic);
-			techRepo.save(technicalInspection);
+			techRepo.save(technicalInspection);*/
 		};
 	}
 }

@@ -70,7 +70,7 @@ public class Car {
     private Set<Manager> managers = new HashSet<>();
 
     @OneToOne(mappedBy = "car",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE},
             fetch = FetchType.LAZY, optional = false)
     @NotNull
     private Engine engine;

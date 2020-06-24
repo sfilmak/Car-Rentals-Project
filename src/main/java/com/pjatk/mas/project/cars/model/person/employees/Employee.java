@@ -55,6 +55,9 @@ public class Employee extends Person<Long> implements Serializable {
     }
 
     public void setSalary(double salary) {
+        if(salary <= 0){
+            throw new IllegalArgumentException("Salary should be bigger than 0!");
+        }
         this.salary = salary;
     }
 
