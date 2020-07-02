@@ -10,10 +10,10 @@ A Spring application with a use case of creating a new car rental.
 
 ## Screenshots 
 
-![List of available cars](http://api.sunshineapps.com.ua/car-rental-project/1.png)
+![List of available cars](https://api.sunshineapps.com.ua/car-rental-project/1.png)
 *Home screen with a list of available cars*
 
-![Car rental creation](http://api.sunshineapps.com.ua/car-rental-project/2.png)
+![Car rental creation](https://api.sunshineapps.com.ua/car-rental-project/2.png)
 *Car rental creation screen*
 
 ## How to launch 
