@@ -41,8 +41,8 @@ public class CarSellingProjectApplication {
 									OrderBonusRepo orderBonusRepo,
 									MechanicRepository mechanicRepo) {
 		return (args) -> {
-			//REMOVE AFTER FIRST LAUNCH
-			/*Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
+			//COMMENT OR REMOVE AFTER FIRST LAUNCH:
+			Car car1 = new Car("Toyota", "Corolla", "Blue", "Hatchback", LocalDate.of(2019, Month.DECEMBER, 12),
 					80, "https://habrastorage.org/webt/qf/fh/9p/qffh9puwalhraccfofxu1nnofaw.jpeg",
 					"Toyota Engine", EngineType.HYBRID);
 
@@ -84,22 +84,22 @@ public class CarSellingProjectApplication {
 
 			carRepo.saveAll(Arrays.asList(car4, car5, car6, car7, car8, car9, car10));
 
-			Customer customer1 = new Customer("Oleksandr", "Sidletskyi", LocalDate.of(1999, Month.MAY, 25),
-					"sidl@gmail.com", "+228", "Nye tvoe delo street",
+			Customer customer1 = new Customer("Peter", "Petrov", LocalDate.of(1999, Month.MAY, 25),
+					"petrov@mail.com", "+228", "Nye tvoe delo street",
 					228L, LocalDate.of(2019, Month.JUNE, 5), "Polska");
 
-			Customer customer2 = new Customer("Artsiom", "Paliaschuk", LocalDate.of(2000, Month.MAY, 6),
-					"pal@gmail.com", "+48328382324", "Stara Praga",
+			Customer customer2 = new Customer("Ivan", "Ivanov", LocalDate.of(2000, Month.MAY, 6),
+					"ivan@mail.com", "+48328382324", "Stara Praga",
 					229L, LocalDate.of(2020, Month.JANUARY, 20), "Belarus");
 
-			Customer customer3 = new Customer("Little", "Bell", LocalDate.of(2011, Month.MAY, 6),
-					"bell@gmail.com", "+9393", "London",
+			Customer customer3 = new Customer("Hoge", "Bell", LocalDate.of(2011, Month.MAY, 6),
+					"bell@mail.com", "+9393", "London",
 					250L, LocalDate.of(2020, Month.JANUARY, 20), "UK");
 
 			customerRepo.save(customer3);
 
-			Consultant consultant1 = new Consultant("Yuta", "Maejima", LocalDate.of(1999, Month.OCTOBER, 4), 15000,
-					"ksks@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2020, Month.JANUARY, 16),
+			Consultant consultant1 = new Consultant("Yamada", "Tarō", LocalDate.of(1999, Month.OCTOBER, 4), 15000,
+					"ksks@mail.com", EmployeeStatus.FULLTIME, LocalDate.of(2020, Month.JANUARY, 16),
 					null, null, "Warsaw");
 
 			CarRental carRental1 = new CarRental(LocalDate.of(2020, Month.AUGUST, 22), LocalDate.of(2020, Month.AUGUST, 24),  RentalStatus.PLANNED, car1, customer1);
@@ -110,8 +110,8 @@ public class CarSellingProjectApplication {
 
 			orderBonusRepo.saveAll(Arrays.asList(orderBonus, orderBonus2));
 
-			HR newHR = new HR("Viktor", "Litovchenko", LocalDate.of(2000, Month.MAY, 28),
-					3000, "nu_da@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null);
+			HR newHR = new HR("Jan", "Kowalski", LocalDate.of(2000, Month.MAY, 28),
+					3000, "jan@mail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null);
 
 			newHR.addUniversity(new University("PJATK", "Warsaw", "Poland"));
 
@@ -120,22 +120,22 @@ public class CarSellingProjectApplication {
 			Specialization specialization = new Specialization("Strong", InspectionType.ENGINE);
 			Specialization specialization2 = new Specialization("Medium", InspectionType.ELECTRONICS);
 
-			Mechanic newMechanic = new Mechanic("Viktor", "Litovchenko", LocalDate.of(2000, Month.MAY, 28),
-					3000, "nu_da@gmail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
+			Mechanic newMechanic = new Mechanic("Janina", "Kowalska", LocalDate.of(2000, Month.MAY, 28),
+					3000, "kow@mail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
 					specialization);
 
-			Mechanic newMechanic2 = new Mechanic("Maksym", "Bordun", LocalDate.of(2000, Month.FEBRUARY, 28),
-					5000, "ff@rr.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
+			Mechanic newMechanic2 = new Mechanic("Mateusz", "Nowak", LocalDate.of(2000, Month.FEBRUARY, 28),
+					5000, "mn@mail.com", EmployeeStatus.FULLTIME, LocalDate.of(2010, Month.MAY, 12), null, null,
 					specialization2);
 
-			Mechanic newMechanic3 = new Mechanic("Artem", "Andreoli", LocalDate.of(2000, Month.DECEMBER, 12),
-					2000, "ff@rr.com", EmployeeStatus.INTERN, null, LocalDate.of(2020, Month.MAY, 12), LocalDate.of(2021, Month.MAY, 12),
+			Mechanic newMechanic3 = new Mechanic("Barbara", "Kowalska", LocalDate.of(2000, Month.DECEMBER, 12),
+					2000, "barbara@mail.com", EmployeeStatus.INTERN, null, LocalDate.of(2020, Month.MAY, 12), LocalDate.of(2021, Month.MAY, 12),
 					specialization2);
 
 			mechanicRepo.saveAll(Arrays.asList(newMechanic2, newMechanic3));
 
 			TechnicalInspection technicalInspection = new TechnicalInspection(LocalDate.of(2020, Month.JULY, 29), true, 150000L, InspectionType.ENGINE, car3, newMechanic);
-			techRepo.save(technicalInspection);*/
+			techRepo.save(technicalInspection);
 		};
 	}
 }

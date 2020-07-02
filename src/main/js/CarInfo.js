@@ -42,6 +42,7 @@ const CarInfo = ({cars, customers, specializations}) => {
     const search = window.location.search;
     const params = new URLSearchParams(search);
     const carID = parseInt(params.get('id'));
+
     const [customerID, setCustomerID] = useState('');
     const [ti_ID, setTiID] = useState('');
     const [mechanicID, setMechanicID] = useState('');

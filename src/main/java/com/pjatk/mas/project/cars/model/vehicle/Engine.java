@@ -5,8 +5,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-//Part of the car
-//Composition
 @Entity(name = "Engine")
 @Table(name = "engine")
 public class Engine {
